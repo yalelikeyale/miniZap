@@ -8,10 +8,10 @@ const jsonParser = bodyParser.json();
 router.post('/:action', jsonParser,(req,res)=>{
   console.log(req.params.action);
   if(req.params.action==='added'){
-    console.log(req.body);
+    console.log(req);
     res.status(200)
   } else if (req.params.action==='removed'){
-  	console.log(req.body);
+  	console.log(req);
   	res.status(200)
   }
 });
