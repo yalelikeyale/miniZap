@@ -7,8 +7,10 @@ const jsonParser = bodyParser.json();
 
 router.post('/:action', jsonParser,(req,res)=>{
   console.log(req.params.action);
-  if(req.params.action==='add_to_cart'){
+  if(req.params.action==='added'){
     console.log(req.body);
+  } else if (req.params.action==='removed'){
+  	console.log(req.body);
   }
 });
 
