@@ -9,8 +9,10 @@ router.post('/:action', jsonParser,(req,res)=>{
   console.log(req.params.action);
   if(req.params.action==='added'){
     console.log(req.body);
+    res.status(200)
   } else if (req.params.action==='removed'){
   	console.log(req.body);
+  	res.status(200)
   }
 });
 
