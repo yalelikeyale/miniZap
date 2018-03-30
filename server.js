@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const { PORT } = require('./config/config');
 const wooRouter  = require('./routers/wooRouter');
+const config = require('dotenv').config()
 
 const app = express();
 
