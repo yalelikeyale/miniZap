@@ -7,6 +7,7 @@ const jsonParser = bodyParser.json();
 
 router.post('/', jsonParser,(req,res)=>{
   let newOrder = req.body;
+  console.log(req.body);
   res.status(201).json(newOrder);
 });
 
