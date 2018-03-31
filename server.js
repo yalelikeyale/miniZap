@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const { PORT } = require('./config/config');
 const segmentRouter  = require('./routers/segmentRouter');
+const podioRouter  = require('./routers/podioRouter');
 const config = require('dotenv').config()
 
 const app = express();
@@ -41,6 +42,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/segment', segmentRouter);
+app.use('/podio', podioRouter);
 
 module.exports = {app, runServer, closeServer};
 
