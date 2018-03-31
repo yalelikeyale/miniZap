@@ -5,9 +5,11 @@ const jsonParser = bodyParser.json();
 
 // const {WooModel} = require('./models/wooModels');
 
-router.post('/', jsonParser,(req,res)=>{
-	console.log(req.body);
-	res.status(201).send('data accepted');
+router.post('/:action', jsonParser,(req,res)=>{
+	if(req.params.action === 'identify'){
+		console.log(req.body);
+		res.status(201).send('user identified');
+	}
 });
 
 module.exports = router;
