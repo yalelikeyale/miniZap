@@ -7,7 +7,7 @@ const jsonParser = bodyParser.json();
 
 router.post('/', jsonParser,(req,res)=>{
 	console.log(req.body);
-	res.status(201);
+	res.status(201).json(req.body);
 });
 
 module.exports = router;

@@ -34,7 +34,7 @@ if (require.main === module) {
 	runServer().catch(err => console.error(err));
 };
 
-app.use([morgan('common'),bodyParser.urlencoded({ extended: true }),bodyParser.json(),express.static('public')])
+app.use([morgan('common'),bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')])
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
