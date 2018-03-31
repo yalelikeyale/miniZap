@@ -27,11 +27,6 @@ router.get('/:category', (req,res)=>{
     if (req.user === undefined) {
         return res.status(403).json({message: 'Must supply valid user credentials'});
     }
-    const podio = new Podio({
-        authType: 'server',
-        clientId: process.env.podio_id,
-        clientSecret: process.env.podio_secret
-    });
 
     // get the app ID and Token for appAuthentication
     const companyId = process.env.podio_company_id;
@@ -40,14 +35,15 @@ router.get('/:category', (req,res)=>{
     // instantiate the SDK
     const podio = new Podio({
         authType: 'app',
-        clientId: clientId,
-        clientSecret: clientSecret
+        clientId: process.env.podio_id,
+        clientSecret: process.env.podio_secret
     });
 
     podio.authenticateWithApp(companyId, companyToken, (err) => {
       if (err) throw new Error(err);
       podio.isAuthenticated().then(() => {
         console.log('made it through authentication');
+        res.status(200).send('made it through authentication')
         // Ready to make API calls in here...
             // podio.request('GET', '').then(function(responseData) {
             //       // response, if available
@@ -55,7 +51,9 @@ router.get('/:category', (req,res)=>{
             // }).catch(function(err){
             //   console.log(err);
             // })
-      }).catch(err => console.log(err));
+      }).catch(err => {
+        res.status(500).send('something went wrong');
+      });
     });
 });
 
