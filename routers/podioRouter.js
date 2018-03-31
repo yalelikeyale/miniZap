@@ -16,10 +16,10 @@ function gateKeeper(req, res, next) {
   const userCredentials = queryString.parse(req.get('x-username-and-password'));
   console.log(USERS);
   console.log(userCredentials);
-  const {user, pass} = Object.assign(
-      {user: null, pass: null}, userCredentials);
+  const {user, password} = Object.assign(
+      {user: null, password: null}, userCredentials);
   req.user = USERS.find(
-      (usr, index) => usr.userName === user && usr.password === pass);
+      (usr, index) => usr.user === user && usr.password === password);
   next();
 }
 
