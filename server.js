@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const { PORT } = require('./config/config');
 const segmentRouter  = require('./routers/segmentRouter');
 const podioRouter  = require('./routers/podioRouter');
-const config = require('dotenv').config()
 
 const app = express();
 
