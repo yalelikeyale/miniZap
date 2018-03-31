@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const { PORT } = require('./config/config');
-const wooRouter  = require('./routers/wooRouter');
+const segmentRouter  = require('./routers/segmentRouter');
 const config = require('dotenv').config()
 
 const app = express();
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.use('/woocom', wooRouter);
+app.use('/segment', segmentRouter);
 
 module.exports = {app, runServer, closeServer};
 
