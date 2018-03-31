@@ -13,7 +13,6 @@ const USERS = [
 ];
 
 function gateKeeper(req, res, next) {
-
   const {user, pass} = Object.assign(
     {user: null, pass: null}, queryString.parse(req.get('x-username-and-password')));
   req.user = USERS.find(
@@ -21,14 +20,13 @@ function gateKeeper(req, res, next) {
   next();
 }
 
-router.use(gateKeeper)
+router.use(gateKeeper);
 
 router.get('/:category', (req,res)=>{
     if (req.user === undefined) {
         return res.status(403).json({message: 'Must supply valid user credentials'});
     }
-    console.log(req.query);
-    console.log(req.params.company);
+    req.status(200).send(req.query);
     // const podio = new Podio({
     //     authType: 'server',
     //     clientId: process.env.podio_id,
@@ -60,3 +58,4 @@ router.get('/:category', (req,res)=>{
     // });
 });
 
+module.exports = router;
