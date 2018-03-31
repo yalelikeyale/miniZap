@@ -7,19 +7,21 @@ const request = require('request');
 const Podio = require('podio-js').api;
 
 const USERS = [
-  {id: 1,
-   user: process.env.username,
+  {user: process.env.username,
    password: process.env.password
   }
 ];
 
-console.log(USERS);
+
 
 function gateKeeper(req, res, next) {
+  const userCredentials = queryString.parse(req.get('x-username-and-password');
+  console.log(USERS);
+  console.log(userCredentials);
   const {user, pass} = Object.assign(
-    {user: null, pass: null}, queryString.parse(req.get('x-username-and-password')));
+      {user: null, pass: null}, userCredentials));
   req.user = USERS.find(
-    (usr, index) => usr.userName === user && usr.password === pass);
+      (usr, index) => usr.userName === user && usr.password === pass);
   next();
 }
 
