@@ -8,10 +8,36 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-
+const { localStrategy } = require('./authentication');
 const {segRouter, podRouter, userRouter} = require('./routers');
 
+passport.use(localStrategy);
+// passport.use(jwtStrategy);
+
 const app = express();
+
+function corsMiddle(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+  if (req.method === 'OPTIONS') {
+    return res.send(204);
+  }
+  next();
+}
+
+app.use([morgan('common'),bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')],corsMiddle)
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
+app.use('/users',   userRouter);
+app.use('/segment', segRouter);
+app.use('/podio',   podRouter);
+app.use('*', (req, res) => {
+  return res.status(404).json({ message: 'Not Found' });
+});
 
 let server;
 
@@ -48,28 +74,8 @@ function closeServer() {
 }
 
 if (require.main === module) {
-	runServer(MLAB_URI,PORT).catch(err => console.error(err));
+  runServer(MLAB_URI,PORT).catch(err => console.error(err));
 };
-
-function corsMiddle(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
-  if (req.method === 'OPTIONS') {
-    return res.send(204);
-  }
-  next();
-}
-
-app.use([morgan('common'),bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')],corsMiddle)
-
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
-
-app.use('/users',   userRouter);
-app.use('/segment', segRouter);
-app.use('/podio',   podRouter);
 
 module.exports = {app, runServer, closeServer};
 
