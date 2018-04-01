@@ -122,7 +122,8 @@ registerRouter.post('/', jsonParser, (req, res) => {
         username,
         password: hash,
         first_name,
-        last_name
+        last_name,
+        admin
       });
     })
     .then(user => {
