@@ -1,5 +1,5 @@
 'use strict';
 const {podRouter} = require('./podioRouter');
-const {registerRouter} = require('./registrationRouter');
+const {userRouter} = require('./usersRouter');
 const {segRouter} = require('./segmentRouter');
-module.exports = {podRouter, registerRouter, segRouter};
+module.exports = {podRouter, userRouter, segRouter};

@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 
-const {segRouter, podRouter, registerRouter} = require('./routers');
+const {segRouter, podRouter, userRouter} = require('./routers');
 
 const app = express();
 
@@ -67,9 +67,9 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.use('/users/registration',   registerRouter);
-app.use('/segment',              segRouter);
-app.use('/podio',                podRouter);
+app.use('/users',   userRouter);
+app.use('/segment', segRouter);
+app.use('/podio',   podRouter);
 
 module.exports = {app, runServer, closeServer};
 

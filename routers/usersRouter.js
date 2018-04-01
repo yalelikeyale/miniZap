@@ -3,11 +3,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {Users} = require('../models/userModel');
 
-const registerRouter = express.Router();
+const userRouter = express.Router();
 const jsonParser = bodyParser.json();
 
 // Post to register a new user
-registerRouter.post('/', jsonParser, (req, res) => {
+userRouter.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -136,7 +136,119 @@ registerRouter.post('/', jsonParser, (req, res) => {
     });
 });
 
-module.exports = {registerRouter};
+//put to update a user ie. change password/ permissions
+userRouter.put('/:username',jsonParser,(req,res)=>{
+  if(!(req.params.username && req.params.username.length > 6)){
+    res.status(400).send('Please Enter a Valid Username');
+  }
+  const stringFields = ['username', 'password', 'first_name', 'last_name'];
+  const nonStringField = stringFields.find(
+    field => field in req.body && typeof req.body[field] !== 'string'
+  );
+  if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Incorrect field type: expected string',
+      location: nonStringField
+    });
+  }
+  const booleanFields = ['admin'];
+  const nonBooleanField = stringFields.find(
+    field => {field in req.body && typeof req.body[field] !== 'boolean'}
+  );
+  if (nonBooleanField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Incorrect field type: expected boolean',
+      location: nonBooleanField
+    });
+  }
+  const updateableFields = ['username', 'password', 'admin'];
+  const nonUpdateableField = updateableFields.find(
+    field => {field in req.body}
+  );
+  if (nonUpdateableField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Cannot update entered field',
+      location: nonUpdateableField
+    });
+  }
+  const updated = {};
+  const updateableFields = ['username', 'password', 'admin'];
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field];
+    }
+  });
+  return Users.find({username})
+      .count()
+      .then(count => {
+        if(!(count===1)){
+          return Promise.reject({
+            code: 422,
+            reason: 'ValidationError',
+            message: 'Username not Found',
+            location: 'username'
+          });
+        }
+        return null
+      })
+      .then(()=>{
+        console.log('made it into the update function');
+        Users.findOneAndUpdate({username},{ $set: updated }, { new: true })
+        .then(updatedUser => {res.status(201).json(updatedUser)})
+        .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
+      })
+      .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
+});
+
+userRouter.delete('/:username', (req,res)=>{
+  if(!(req.params.username && req.params.username.length>6)){
+    res.status(400).send('Please Enter a Valid Username');
+  }
+  Users.find({username})
+      .count()
+      .then(count => {
+        if(!(count===1)){
+          return Promise.reject({
+            code: 422,
+            reason: 'ValidationError',
+            message: 'Username not Found',
+            location: 'username'
+          });
+        }
+        return null
+      })
+      .then(()=>{
+        console.log('made it into the delete function')
+        Users.find({username})
+          .remove()
+          .then(()=>{
+            res.status(201).send('User Deleted');
+          });
+      })
+});
+
+userRouter.get('/',(res,req)=>{
+  Users
+    .find({})
+    .then(users=>{
+      userList = []
+      users.forEach(user=>{
+        userList.push(user);
+      })
+      res.status(200).json(userList);
+    })
+    .catch(err => {res.status(500).send('Internal Server Error')})
+});
+
+
+
+module.exports = {userRouter};
 
 
 
