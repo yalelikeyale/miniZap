@@ -98,7 +98,7 @@ registerRouter.post('/', jsonParser, (req, res) => {
   let {username, password, first_name = '', last_name = ''} = req.body;
   // Username and password come in pre-trimmed, otherwise we throw an error
   // before this
-  firstName = firstName.trim();
+  first_name = first_name.trim();
   lastName = lastName.trim();
 
   return Users.find({username})
