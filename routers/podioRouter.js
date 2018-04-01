@@ -1,6 +1,6 @@
 const express = require('express');
 const queryString = require('query-string');
-const router = express.Router();
+const podRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const request = require('request');
@@ -21,9 +21,9 @@ function gateKeeper(req, res, next) {
   next();
 }
 
-router.use(gateKeeper);
+podRouter.use(gateKeeper);
 
-router.get('/:category', (req,res)=>{
+podRouter.get('/:category', (req,res)=>{
     if (req.user === undefined) {
         return res.status(403).json({message: 'Must supply valid user credentials'});
     }
@@ -57,4 +57,4 @@ router.get('/:category', (req,res)=>{
     });
 });
 
-module.exports = router;
+module.exports = {podRouter};

@@ -1,10 +1,25 @@
-// get an instance of mongoose and mongoose.Schema
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+'use strict';
 
-// set up a mongoose model and pass it using module.exports
-module.exports = mongoose.model('User', new Schema({ 
-    username: String, 
-    password: String, 
-    admin: Boolean 
-}));
+const mongoose = require('mongoose');
+
+// this is our schema to represent a restaurant
+const usersSchema = new mongoose.Schema({
+  first_name:{type: String, default:''},
+  last_name: {type: String, default:''},
+  username:  {type: String, required: true},
+  password:  {type: String, required: true},
+  admin:     {type: Boolean, default: false}
+});
+
+usersSchema.methods.serialize = function() {
+  return {
+    first_name: this.first_name,
+    last_name: this.last_name,
+    username: this.username,
+    admin: this.admin,
+  };
+}
+
+const Users = mongoose.model('users', usersSchema);
+
+module.exports = {Users};

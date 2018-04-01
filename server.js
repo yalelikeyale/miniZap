@@ -1,13 +1,15 @@
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const segmentRouter  = require('./routers/segmentRouter');
-const podioRouter  = require('./routers/podioRouter');
-const mongoose = require('mongoose');
 const config = require('dotenv').config()
 const PORT = process.env.PORT || 8080;
 const MLAB_URI = process.env.MLAB_URI;
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
+
+const {segRouter, podRouter, registerRouter} = require('./routers');
 
 const app = express();
 
@@ -49,14 +51,25 @@ if (require.main === module) {
 	runServer().catch(err => console.error(err));
 };
 
-app.use([morgan('common'),bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')])
+function corsMiddle(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+  if (req.method === 'OPTIONS') {
+    return res.send(204);
+  }
+  next();
+}
+
+app.use([morgan('common'),bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')],corsMiddle)
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.use('/segment', segmentRouter);
-app.use('/podio', podioRouter);
+app.use('/users/registration',   registerRouter);
+app.use('/segment',              segRouter);
+app.use('/podio',                podRouter);
 
 module.exports = {app, runServer, closeServer};
 
