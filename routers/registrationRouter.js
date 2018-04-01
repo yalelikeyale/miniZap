@@ -95,7 +95,7 @@ registerRouter.post('/', jsonParser, (req, res) => {
     });
   }
 
-  let {username, password, first_name = '', last_name = ''} = req.body;
+  let {username, password, first_name = '', last_name = '', admin} = req.body;
   // Username and password come in pre-trimmed, otherwise we throw an error
   // before this
   first_name = first_name.trim();
@@ -117,7 +117,6 @@ registerRouter.post('/', jsonParser, (req, res) => {
       return Users.hashPassword(password);
     })
     .then((hash) => {
-      console.log('made it here')
       return Users.create({
         username,
         password: hash,
