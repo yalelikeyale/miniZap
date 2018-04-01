@@ -99,7 +99,7 @@ registerRouter.post('/', jsonParser, (req, res) => {
   // Username and password come in pre-trimmed, otherwise we throw an error
   // before this
   first_name = first_name.trim();
-  lastName = lastName.trim();
+  last_name = last_name.trim();
 
   return Users.find({username})
     .count()
