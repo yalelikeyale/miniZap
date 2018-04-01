@@ -1,6 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 // this is our schema to represent a restaurant
 const usersSchema = new mongoose.Schema({
@@ -19,6 +20,14 @@ usersSchema.methods.serialize = function() {
     admin: this.admin,
   };
 }
+
+usersSchema.methods.validatePassword = function(password) {
+  return bcrypt.compare(password, this.password);
+};
+
+usersSchema.statics.hashPassword = function(password) {
+  return bcrypt.hash(password, 10);
+};
 
 const Users = mongoose.model('users', usersSchema);
 

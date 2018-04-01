@@ -1,6 +1,6 @@
 const config = require('dotenv').config()
 const PORT = process.env.PORT || 8080;
-const MLAB_URI = process.env.MLAB_URI;
+const MLAB_URI = process.env.MLAB_URI || 'mongodb://localhost/users';
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -15,21 +15,21 @@ const app = express();
 
 let server;
 
-function runServer(databaseUrl, port = PORT) {
+function runServer(dbURI, port) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(MLAB_URI, err => {
+    mongoose.connect(dbURI, err => {
       if (err) {
+        console.log(err);
         return reject(err);
       }
       server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();
-      })
-        .on('error', err => {
+      }).on('error', err => {
           mongoose.disconnect();
           reject(err);
         });
-    });
+     })
   });
 }
 
@@ -48,7 +48,7 @@ function closeServer() {
 }
 
 if (require.main === module) {
-	runServer().catch(err => console.error(err));
+	runServer(MLAB_URI,PORT).catch(err => console.error(err));
 };
 
 function corsMiddle(req, res, next) {
