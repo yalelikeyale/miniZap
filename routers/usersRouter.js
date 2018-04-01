@@ -198,9 +198,8 @@ userRouter.put('/:username',jsonParser,(req,res)=>{
         return null
       })
       .then(()=>{
-        console.log('made it into the update function');
         Users.findOneAndUpdate({username},{ $set: updated }, { new: true })
-        .then(updatedUser => {res.status(201).json(updatedUser)})
+        .then(updatedUser => {res.status(201).json(updatedUser.serialize())})
         .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
       })
       .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
@@ -225,7 +224,6 @@ userRouter.delete('/:username', (req,res)=>{
         return null
       })
       .then(()=>{
-        console.log('made it into the delete function')
         Users.find({username})
           .remove()
           .then(()=>{
