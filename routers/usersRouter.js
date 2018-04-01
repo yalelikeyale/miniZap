@@ -138,7 +138,8 @@ userRouter.post('/', jsonParser, (req, res) => {
 
 //put to update a user ie. change password/ permissions
 userRouter.put('/:username',jsonParser,(req,res)=>{
-  if(!(req.params.username && req.params.username.length > 6)){
+  let username = req.params.username;
+  if(!(username && username.length > 6)){
     res.status(400).send('Please Enter a Valid Username');
   }
   const stringFields = ['username', 'password', 'first_name', 'last_name'];
@@ -178,7 +179,6 @@ userRouter.put('/:username',jsonParser,(req,res)=>{
     });
   }
   const updated = {};
-  const updateableFields = ['username', 'password', 'admin'];
   updateableFields.forEach(field => {
     if (field in req.body) {
       updated[field] = req.body[field];
@@ -207,7 +207,8 @@ userRouter.put('/:username',jsonParser,(req,res)=>{
 });
 
 userRouter.delete('/:username', (req,res)=>{
-  if(!(req.params.username && req.params.username.length>6)){
+  let username = req.params.username 
+  if(!(username && username.length>6)){
     res.status(400).send('Please Enter a Valid Username');
   }
   Users.find({username})
@@ -233,17 +234,10 @@ userRouter.delete('/:username', (req,res)=>{
       })
 });
 
-userRouter.get('/',(res,req)=>{
-  Users
-    .find({})
-    .then(users=>{
-      userList = []
-      users.forEach(user=>{
-        userList.push(user);
-      })
-      res.status(200).json(userList);
-    })
-    .catch(err => {res.status(500).send('Internal Server Error')})
+userRouter.get('/', (req, res) => {
+  return Users.find()
+    .then(users => res.json(users.map(user => user.serialize())))
+    .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
 
