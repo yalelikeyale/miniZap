@@ -9,10 +9,9 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const { localStrategy } = require('./authentication');
-const {segRouter, podRouter, userRouter} = require('./routers');
+const {loginRouter, segRouter, podRouter, userRouter} = require('./routers');
 
 passport.use(localStrategy);
-// passport.use(jwtStrategy);
 
 const app = express();
 
@@ -32,9 +31,10 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.use('/login',  loginRouter);
 app.use('/users',   userRouter);
-app.use('/segment', segRouter);
-app.use('/podio',   podRouter);
+app.use('/segment',  segRouter);
+app.use('/podio',    podRouter);
 app.use('*', (req, res) => {
   return res.status(404).json({ message: 'Not Found' });
 });

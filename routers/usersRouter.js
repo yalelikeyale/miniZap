@@ -1,17 +1,15 @@
 'use strict';
 const express = require('express');
-const passport = require('passport');
 const bodyParser = require('body-parser');
 const {Users} = require('../models/userModel');
 
 const userRouter = express.Router();
 const jsonParser = bodyParser.json();
 
-const localAuth = passport.authenticate('local', {session: false});
 
 userRouter.use(jsonParser);
 // Post to register a new user
-userRouter.post('/', localAuth, (req, res) => {
+userRouter.post('/', (req, res) => {
   const requiredFields = ['username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
@@ -141,7 +139,7 @@ userRouter.post('/', localAuth, (req, res) => {
 });
 
 //put to update a user ie. change password/ permissions
-userRouter.put('/:username',localAuth,(req,res)=>{
+userRouter.put('/:username',(req,res)=>{
   let username = req.params.username;
   if(!(username && username.length > 6)){
     res.status(400).send('Please Enter a Valid Username');
@@ -209,7 +207,7 @@ userRouter.put('/:username',localAuth,(req,res)=>{
       .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
 });
 
-userRouter.delete('/:username', localAuth, (req,res)=>{
+userRouter.delete('/:username',  (req,res)=>{
   let username = req.params.username 
   if(!(username && username.length>6)){
     res.status(400).send('Please Enter a Valid Username');
@@ -236,7 +234,7 @@ userRouter.delete('/:username', localAuth, (req,res)=>{
       })
 });
 
-userRouter.get('/', localAuth, (req, res) => {
+userRouter.get('/',  (req, res) => {
   return Users.find()
     .then(users => res.json(users.map(user => user.serialize())))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
