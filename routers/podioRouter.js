@@ -40,32 +40,6 @@ podioRouter.get('/', (req,res)=>{
 
 podioRouter.post('/companies', jsonParser, (req,res)=>{
   console.log(req.body);
-  let hook_id = req.body.hook_id;
-  podio.authenticateWithApp(companyId, companyToken, (err) => {
-    if (err) throw new Error(err);
-    podio.isAuthenticated().then(() => {
-      const Data = { data: true };
-      podio.request('POST',`hook/${hook_id}/verify/validate`,Data).then(res=>{console.log(res)});
-      res.status(200).send('made it through authentication')
-    }).catch(err => {
-      res.status(500).send('something went wrong');
-    });
-  });
-
-  // const options = {
-  //   method:'POST',
-  //   uri:`https://api.podio.com/hook/${hook_id}/verify/validate`,
-  //   body:req.body,
-  //   json:true
-  // }
-  // rp(options)
-  //   .then(res=>{
-  //     console.log('hook verified')
-  //   })
-  //   .catch(err => {
-  //     log.error(err);
-  //   })
-  //   res.status(201).end();
 })
 
 module.exports = {podioRouter};
