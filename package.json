@@ -25,6 +25,7 @@
     "podio-js": "^1.6.1",
     "query-string": "^6.0.0",
     "request": "^2.85.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "winston": "^2.4.1"
   }
 }
