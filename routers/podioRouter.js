@@ -13,13 +13,13 @@ const podio = new Podio({
     clientSecret: process.env.podio_secret
 });
 
+const companyId = process.env.podio_company_id;
+const companyToken = process.env.podio_company_token;
 
-podioRouter.get('/:category', (req,res)=>{
+
+podioRouter.get('/', (req,res)=>{
 
     // get the app ID and Token for appAuthentication
-    const companyId = process.env.podio_company_id;
-    const companyToken = process.env.podio_company_token;
-
     podio.authenticateWithApp(companyId, companyToken, (err) => {
       if (err) throw new Error(err);
       podio.isAuthenticated().then(() => {
