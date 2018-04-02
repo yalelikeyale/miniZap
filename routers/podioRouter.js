@@ -3,14 +3,9 @@ const queryString = require('query-string');
 const podioRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-const request = require('request');
+const rp = require('request-promise');
 const Podio = require('podio-js').api;
 
-const USERS = [
-  {user: process.env.username,
-   password: process.env.password
-  }
-];
 
 podioRouter.get('/:category', (req,res)=>{
 
@@ -44,7 +39,20 @@ podioRouter.get('/:category', (req,res)=>{
 });
 
 podioRouter.post('/companies', (req,res)=>{
-  console.log(req);
+  console.log(req.body.hook_id);
+  let hook_id = req.body.hook_id;
+  const options = {
+    method:'POST',
+    uri:`https://api.podio.com/hook/${hook_id}/verify/validate`
+  }
+  rp(options)
+    .then(res=>{
+      console.log('hook verified')
+    })
+    .catch(err => {
+      console.log(err);
+    })
+    res.status(201).end();
 })
 
 module.exports = {podioRouter};
