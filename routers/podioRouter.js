@@ -39,7 +39,7 @@ podioRouter.get('/', (req,res)=>{
 });
 
 podioRouter.post('/companies', jsonParser, (req,res)=>{
-  console.log(req.body.hook_id);
+  console.log(req.body);
   let hook_id = req.body.hook_id;
   podio.authenticateWithApp(companyId, companyToken, (err) => {
     if (err) throw new Error(err);
