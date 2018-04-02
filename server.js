@@ -34,10 +34,10 @@ app.get('/', (req, res) => {
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-app.use('/user_login',  loginRouter);
-app.use('/users',jwtAuth,userRouter);
-app.use('/segment',       segRouter);
-app.use('/podio',         podRouter);
+app.use('/user_login', loginRouter);
+app.use('/users',       userRouter);
+app.use('/segment',      segRouter);
+app.use('/podio',        podRouter);
 // app.use('*', (req, res) => {
 //   return res.status(404).json({ message: 'Not Found' });
 // });

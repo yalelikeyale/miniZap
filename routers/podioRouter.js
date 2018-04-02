@@ -1,6 +1,6 @@
 const express = require('express');
 const queryString = require('query-string');
-const podRouter = express.Router();
+const podioRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const request = require('request');
@@ -12,21 +12,7 @@ const USERS = [
   }
 ];
 
-function gateKeeper(req, res, next) {
-  const userCredentials = queryString.parse(req.get('x-username-and-password'));
-  const {user, password} = Object.assign(
-      {user: null, password: null}, userCredentials);
-  req.user = USERS.find(
-      (usr, index) => usr.user === user && usr.password === password);
-  next();
-}
-
-podRouter.use(gateKeeper);
-
-podRouter.get('/:category', (req,res)=>{
-    if (req.user === undefined) {
-        return res.status(403).json({message: 'Must supply valid user credentials'});
-    }
+podioRouter.get('/:category', (req,res)=>{
 
     // get the app ID and Token for appAuthentication
     const companyId = process.env.podio_company_id;
@@ -57,4 +43,8 @@ podRouter.get('/:category', (req,res)=>{
     });
 });
 
-module.exports = {podRouter};
+podioRouter.post('/companies', (req,res)=>{
+  console.log(req);
+})
+
+module.exports = {podioRouter};
