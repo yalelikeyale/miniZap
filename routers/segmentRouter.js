@@ -30,7 +30,7 @@ segRouter.post('/order-completed', jsonParser,(req,res)=>{
 	}
 	orderPayload = {
 		event:'Order Completed',
-		userID:order.customer_id,
+		userId:order.customer_id,
 		properties:{
 			order_id: order.id,
 			total:order.total,
@@ -41,7 +41,7 @@ segRouter.post('/order-completed', jsonParser,(req,res)=>{
 			products:productsList,
 		}
 	}
-	// analytics.track(orderPayload);
+	analytics.track(orderPayload);
 	res.status(201).json(orderPayload);
 });
 
