@@ -13,6 +13,7 @@ segRouter.post('/identify', jsonParser,(req,res)=>{
 });
 
 segRouter.post('/order-completed', jsonParser,(req,res)=>{
+	console.log('!!!made it here!!!');
 	const order = req.body;
 	const productsList = [];
 	for(i=0;i<order.line_items.length;i++){
@@ -32,19 +33,17 @@ segRouter.post('/order-completed', jsonParser,(req,res)=>{
 		event:'Order Completed',
 		userID:order.customer_id,
 		properties:{
-			order_id: order.transaction_id,
-			checkout_id: order.id,
+			order_id: order.id,
 			total:order.total,
-			revenue:order.total,
 			shipping:order.shipping_total,
 			tax:order.total_tax,
 			discount:order.discount_total,
-			coupon:order.coupon_lines[0].id,
 			currency:order.currency,
 			products:productsList,
 		}
 	}
-	analytics.track(orderPayload);
+	console.log(orderPayload);
+	// analytics.track(orderPayload);
 });
 
 module.exports = {segRouter};
