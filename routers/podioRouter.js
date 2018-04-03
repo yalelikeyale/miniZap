@@ -19,7 +19,7 @@ const podio = new Podio({
 });
 
 podioRouter.use(require('podio-js').middleware({
-  companyId: _podioId,
+  clientId: _podioId,
   clientSecret: _podioSecret
 }));
 
