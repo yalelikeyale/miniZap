@@ -13,7 +13,6 @@ segRouter.post('/identify', jsonParser,(req,res)=>{
 });
 
 segRouter.post('/order-completed', jsonParser,(req,res)=>{
-	
 	const order = req.body;
 	const productsList = [];
 	for(i=0;i<order.line_items.length;i++){
@@ -42,7 +41,7 @@ segRouter.post('/order-completed', jsonParser,(req,res)=>{
 			products:productsList,
 		}
 	}
-	analytics.track(orderPayload);
+	// analytics.track(orderPayload);
 	res.status(201).json(orderPayload);
 });
 
