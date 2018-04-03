@@ -3,15 +3,23 @@ const segRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
+const WooCommerceAPI = require('woocommerce-api');
 
-segRouter.post('/:action', jsonParser,(req,res)=>{
-	if(req.params.action === 'identify'){
-		console.log(req.body);
-		res.status(201).send('user identified');
-	} else if (req.params.action === 'cart_item_added'){
-		console.log(req.body);
-		res.status(201).send('product added to cart');
-	}
+const WooCommerce = new WooCommerceAPI({
+	url: 'http://example.com',
+	consumerKey: 'ck_8ed852babf969a3edf04625213bb73e0d677e352',
+	consumerSecret: 'cs_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+	wpAPI: true,
+	version: 'wc/v1'
+});
+
+
+segRouter.post('/identify', jsonParser,(req,res)=>{
+
+});
+
+segRouter.post('/addtocart', jsonParser,(req,res)=>{
+
 });
 
 module.exports = {segRouter};
