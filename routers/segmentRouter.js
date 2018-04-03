@@ -9,11 +9,11 @@ const analytics = new Analytics(write_key);
 
 
 segRouter.post('/identify', jsonParser,(req,res)=>{
-
+	res.status(201).send('In identify Call');
 });
 
 segRouter.post('/order-completed', jsonParser,(req,res)=>{
-	console.log('!!!made it here!!!');
+	res.status(201).send('in order completed call');
 	const order = req.body;
 	const productsList = [];
 	for(i=0;i<order.line_items.length;i++){
