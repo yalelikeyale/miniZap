@@ -7,10 +7,17 @@ const write_key = process.env.segment_write;
 
 const analytics = new Analytics(write_key);
 
+{ user_id: 2926,
+first_name: 'newmany89',
+user_email: 'newmany89@gmail.com',
+date_registered: '2018-03-29 07:57:32' }
 
 segRouter.post('/identify', jsonParser,(req,res)=>{
-	console.log(req.body);
-	res.status(201).send('Identify')
+	const userObj = req.body;
+	const userId = userObj.user_id
+	delete userObj.user_id
+	analytics.identify(userId, userObj);
+	res.status(201).send('Identified')
 });
 
 segRouter.post('/order-completed', jsonParser,(req,res)=>{
