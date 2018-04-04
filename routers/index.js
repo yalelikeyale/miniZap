@@ -3,4 +3,4 @@ const {loginRouter} = require('./signinRouter');
 const {podioRouter} = require('./podioRouter');
 const {userRouter} = require('./usersRouter');
 const {segRouter} = require('./segmentRouter');
-module.exports = {loginRouter, podioRouter, userRouter, segRouter};
+module.exports = {loginRouter, userRouter, segRouter};

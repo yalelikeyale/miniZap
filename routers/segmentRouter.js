@@ -9,7 +9,8 @@ const analytics = new Analytics(write_key);
 
 
 segRouter.post('/identify', jsonParser,(req,res)=>{
-	res.status(201).send('In identify Call');
+	console.log(req.body);
+	res.status(201).send('Identify')
 });
 
 segRouter.post('/order-completed', jsonParser,(req,res)=>{
