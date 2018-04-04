@@ -7,10 +7,6 @@ const write_key = process.env.segment_write;
 
 const analytics = new Analytics(write_key);
 
-{ user_id: 2926,
-first_name: 'newmany89',
-user_email: 'newmany89@gmail.com',
-date_registered: '2018-03-29 07:57:32' }
 
 segRouter.post('/identify', jsonParser,(req,res)=>{
 	const userObj = req.body;
