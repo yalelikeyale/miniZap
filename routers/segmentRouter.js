@@ -1,5 +1,5 @@
 const express = require('express');
-const segRouter = express.Router();
+const segmentRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const Analytics = require('analytics-node');
@@ -8,7 +8,7 @@ const write_key = process.env.segment_write;
 const analytics = new Analytics(write_key);
 
 
-segRouter.post('/identify', jsonParser,(req,res)=>{
+segmentRouter.post('/identify', jsonParser,(req,res)=>{
 	const userObj = req.body;
 	const userId = userObj.user_id
 	delete userObj.user_id
@@ -16,7 +16,7 @@ segRouter.post('/identify', jsonParser,(req,res)=>{
 	res.status(201).send('Identified')
 });
 
-segRouter.post('/order-completed', jsonParser,(req,res)=>{
+segmentRouter.post('/order-completed', jsonParser,(req,res)=>{
 	const order = req.body;
 	const productsList = [];
 	for(i=0;i<order.line_items.length;i++){
@@ -49,7 +49,7 @@ segRouter.post('/order-completed', jsonParser,(req,res)=>{
 	res.status(201).json(orderPayload);
 });
 
-module.exports = {segRouter};
+module.exports = {segmentRouter};
 
 
 

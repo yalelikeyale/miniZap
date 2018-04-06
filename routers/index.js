@@ -1,5 +1,7 @@
 'use strict';
 const {loginRouter} = require('./signinRouter');
 const {userRouter} = require('./usersRouter');
-const {segRouter} = require('./segmentRouter');
-module.exports = {loginRouter, userRouter, segRouter};
+const {segmentRouter} = require('./segmentRouter');
+const {podioRouter} = require('./podioRouter');
+const {feedlyRouter} = require('./feedlyRouter');
+module.exports = {loginRouter, userRouter, segmentRouter, podioRouter, feedlyRouter};
