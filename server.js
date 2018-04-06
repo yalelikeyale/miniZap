@@ -36,8 +36,8 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 app.use('/user_login', loginRouter);
 app.use('/users',       userRouter);
-app.use('/segment',      segmentRouter);
-app.use('/feedly',      feedlyRouter);
+app.use('/segment',  segmentRouter);
+app.use('/feedly',    feedlyRouter);
 app.use('/podio',      podioRouter);
 // app.use('*', (req, res) => {
 //   return res.status(404).json({ message: 'Not Found' });
