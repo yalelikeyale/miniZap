@@ -24,34 +24,6 @@ userRouter.post('/',jwtAuth, (req, res) => {
     });
   }
 
-  const stringFields = ['username', 'password', 'first_name', 'last_name'];
-  const nonStringField = stringFields.find(
-    field => field in req.body && typeof req.body[field] !== 'string'
-  );
-
-  if (nonStringField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Incorrect field type: expected string',
-      location: nonStringField
-    });
-  }
-
-  const booleanFields = ['admin'];
-  const nonBooleanField = stringFields.find(
-    field => {field in req.body && typeof req.body[field] !== 'boolean'}
-  );
-
-  if (nonBooleanField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Incorrect field type: expected boolean',
-      location: nonBooleanField
-    });
-  }
-
   const explicityTrimmedFields = ['username', 'password'];
   const nonTrimmedField = explicityTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
@@ -99,7 +71,7 @@ userRouter.post('/',jwtAuth, (req, res) => {
     });
   }
 
-  let {username, password, first_name = '', last_name = '', admin} = req.body;
+  let {username, password, first_name = '', last_name = ''} = req.body;
   // Username and password come in pre-trimmed, otherwise we throw an error
   // before this
   first_name = first_name.trim();
@@ -125,8 +97,7 @@ userRouter.post('/',jwtAuth, (req, res) => {
         username,
         password: hash,
         first_name,
-        last_name,
-        admin
+        last_name
       });
     })
     .then(user => {
@@ -158,19 +129,7 @@ userRouter.put('/:username',jwtAuth,(req,res)=>{
       location: nonStringField
     });
   }
-  const booleanFields = ['admin'];
-  const nonBooleanField = stringFields.find(
-    field => {field in req.body && typeof req.body[field] !== 'boolean'}
-  );
-  if (nonBooleanField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Incorrect field type: expected boolean',
-      location: nonBooleanField
-    });
-  }
-  const updateableFields = ['username', 'password', 'admin'];
+  const updateableFields = ['username', 'password'];
   const nonUpdateableField = updateableFields.find(
     field => {field in req.body}
   );
@@ -241,7 +200,6 @@ userRouter.get('/',jwtAuth,(req, res) => {
     .then(users => res.json(users.map(user => user.serialize())))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
-
 
 
 module.exports = {userRouter};

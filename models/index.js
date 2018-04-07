@@ -1,4 +1,6 @@
 'use strict';
 const {Airtable} = require('./airModel');
 const {Users} = require('./userModel')
-module.exports = {Airtable, Users};
+const {Sources} = require('./sourcesModel')
+const {Destinations} = require('./destModel')
+module.exports = {Airtable, Users, Sources, Destinations};
