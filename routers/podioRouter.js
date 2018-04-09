@@ -26,23 +26,8 @@ const companyToken = process.env.podio_company_token;
 
 podioRouter.get('/', (req,res)=>{
     // get the app ID and Token for appAuthentication
-    podio.authenticateWithApp(companyId, companyToken, (err) => {
-      if (err) throw new Error(err);
-      podio.isAuthenticated().then(() => {
-        console.log('made it through authentication');
-        // res.status(200).send('made it through authentication')
-        // Ready to make API calls in here...
-            // podio.request('GET', '').then(function(responseData) {
-            //       // response, if available
-
-            // }).catch(function(err){
-            //   console.log(err);
-            // })
-      }).catch(err => {
-        res.status(500).send('something went wrong');
-      });
-    });
-});
+    res.status(201).send('made it into podio get function')
+  });
 
 podioRouter.post('/companies', jsonParser, (req,res)=>{
   let hook_id = res.body.hook_id;

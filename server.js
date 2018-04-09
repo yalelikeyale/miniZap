@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const {checkConnections, corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
 const {localStrategy, jwtStrategy } = require('./authentication');
@@ -15,16 +16,6 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 const app = express();
-
-function corsMiddle(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
-  if (req.method === 'OPTIONS') {
-    return res.send(204);
-  }
-  next();
-}
 
 app.use([morgan('common'),bodyParser.urlencoded({ extended: false }),bodyParser.json(),express.static('public')],corsMiddle)
 
@@ -37,9 +28,9 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 app.use('/user_login', loginRouter);
 app.use('/users',       userRouter);
 app.use('/segment',  segmentRouter);
-app.use('/feedly',    feedlyRouter);
-app.use('/podio',      podioRouter);
-app.use('/create_connection',      connectionsRouter);
+app.use('/feedly', checkConnections, feedlyRouter);
+app.use('/podio', checkConnections, podioRouter);
+app.use('/create_connection', connectionsRouter);
 // app.use('*', (req, res) => {
 //   return res.status(404).json({ message: 'Not Found' });
 // });

@@ -12,8 +12,14 @@ segmentRouter.post('/identify', jsonParser,(req,res)=>{
 	const userObj = req.body;
 	const userId = userObj.user_id
 	delete userObj.user_id
-	analytics.identify({userId:userId, traits:userObj});
-	res.status(201).send('Identified')
+	console.log(userObj)
+	if(userObj){
+		analytics.identify({userId:userId, traits:userObj});
+		res.status(201).send('Identified')
+	} else {
+		analytics.identify({userId:userId});
+		res.status(201).send('Identified')	
+	}
 });
 
 segmentRouter.post('/order-completed', jsonParser,(req,res)=>{
