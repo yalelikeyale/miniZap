@@ -22,11 +22,6 @@ segmentRouter.post('/identify', jsonParser,(req,res)=>{
 	}
 });
 
-segmentRouter.post('/register', jsonParser,(req,res)=>{
-	const userObj = req.body;
-	console.log(userObj)
-});
-
 segmentRouter.post('/order-completed', jsonParser,(req,res)=>{
 	const order = req.body;
 	const productsList = [];
