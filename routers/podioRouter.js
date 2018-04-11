@@ -24,26 +24,20 @@ podioRouter.use(require('podio-js').middleware({
 }));
 
 
-podioRouter.get('/', (req,res)=>{
-    console.log(req.body)
-    // get the app ID and Token for appAuthentication
-    res.status(201).send('made it into podio get function');
-  });
-
 podioRouter.post('/companies', jsonParser, (req,res)=>{
   console.log(req)
-  let hook_id = res.body.hook_id;
-  podio.authenticateWithApp(companyId, companyToken, (err) => {
-    if (err) throw new Error(err);
-    podio.isAuthenticated().then(() => {
-      console.log('made it through authentication');
-      // res.status(200).send('made it through authentication')
-      podio.request('GET', `/app/${companyId}/field/${hook_id}`)
-        .then(response=>{console.log(response); res.status(200).end()});
-    }).catch(err => {
-      res.status(500).send('something went wrong');
-    });
-  });
+  // let hook_id = res.body.hook_id;
+  // podio.authenticateWithApp(companyId, companyToken, (err) => {
+  //   if (err) throw new Error(err);
+  //   podio.isAuthenticated().then(() => {
+  //     console.log('made it through authentication');
+  //     // res.status(200).send('made it through authentication')
+  //     podio.request('GET', `/app/${companyId}/field/${hook_id}`)
+  //       .then(response=>{console.log(response); res.status(200).end()});
+  //   }).catch(err => {
+  //     res.status(500).send('something went wrong');
+  //   });
+  // });
 })
 
 module.exports = {podioRouter};
