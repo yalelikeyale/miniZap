@@ -26,7 +26,7 @@ segmentRouter.post('/order-completed', jsonParser,(req,res)=>{
 	const order = req.body;
 	const productsList = [];
 	console.log(order);
-	if order.hasOwnProperty('line_items'){
+	if (order.hasOwnProperty('line_items')){
 		for(i=0;i<order.line_items.length;i++){
 			let currentItem = order.line_items[i]
 			let lineItem = {}
