@@ -46,7 +46,18 @@ const getItemDetails = (item_id)=>{
       podio.request('GET', `/item/${item_id}`)
         .then(response=>{
           response.fields.map(getContactDetails)
-          autopilot.contacts.upsert(userObj).then(result=>{console.log('ADDED CONTACT')}).catch(err=>{console.error(err)})
+          autopilot.contacts.upsert(userObj)
+          .then(result=>{
+            console.log(result);
+            autopilot.journeys.add(001, userObj.Email, (err,resp)=>{
+              if(err){
+                console.error(err);
+              }
+              console.log(resp);
+            })
+
+          })
+          .catch(err=>{console.error(err)})
         });
     }).catch(err => {
       res.status(500).send('something went wrong');
