@@ -26,34 +26,37 @@ segmentRouter.post('/order-completed', jsonParser,(req,res)=>{
 	const order = req.body;
 	const productsList = [];
 	console.log(order);
-	for(i=0;i<order.line_items.length;i++){
-		let currentItem = order.line_items[i]
-		let lineItem = {}
-		lineItem.product_id = currentItem.product_id
-		lineItem.sku = currentItem.sku
-		lineItem.variation = currentItem.variation_id
-		lineItem.name = currentItem.name
-		lineItem.price = currentItem.price
-		lineItem.quantity = currentItem.quantity
-		lineItem.tax= currentItem.total_tax
-		lineItem.total = currentItem.total
-		productsList.push(lineItem);
-	}
-	orderPayload = {
-		event:'Order Completed',
-		userId:order.customer_id,
-		properties:{
-			order_id: order.id,
-			total:order.total,
-			shipping:order.shipping_total,
-			tax:order.total_tax,
-			discount:order.discount_total,
-			currency:order.currency,
-			products:productsList,
+	if order.hasOwnProperty('line_items'){
+		for(i=0;i<order.line_items.length;i++){
+			let currentItem = order.line_items[i]
+			let lineItem = {}
+			lineItem.product_id = currentItem.product_id
+			lineItem.sku = currentItem.sku
+			lineItem.variation = currentItem.variation_id
+			lineItem.name = currentItem.name
+			lineItem.price = currentItem.price
+			lineItem.quantity = currentItem.quantity
+			lineItem.tax= currentItem.total_tax
+			lineItem.total = currentItem.total
+			productsList.push(lineItem);
 		}
+		orderPayload = {
+			event:'Order Completed - WC',
+			userId:order.customer_id,
+			properties:{
+				order_id: order.id,
+				total:order.total,
+				shipping:order.shipping_total,
+				tax:order.total_tax,
+				discount:order.discount_total,
+				currency:order.currency,
+				products:productsList,
+			}
+		}
+		analytics.track(orderPayload);
+		res.status(201).json(orderPayload);
 	}
-	analytics.track(orderPayload);
-	res.status(201).json(orderPayload);
+	res.status(400).end();
 });
 
 module.exports = {segmentRouter};
