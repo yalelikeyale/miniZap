@@ -29,7 +29,7 @@ app.use('/user_login', loginRouter);
 app.use('/users',       userRouter);
 app.use('/segment',  segmentRouter);
 app.use('/feedly', checkConnections, feedlyRouter);
-app.use('/podio', checkConnections, podioRouter);
+app.use('/podio', podioRouter);
 app.use('/create_connection', connectionsRouter);
 // app.use('*', (req, res) => {
 //   return res.status(404).json({ message: 'Not Found' });
