@@ -12,6 +12,7 @@
   "dependencies": {
     "airtable": "^0.5.2",
     "analytics-node": "^3.2.0",
+    "autopilot-api": "^2.2.0",
     "aws-sdk": "^2.216.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
