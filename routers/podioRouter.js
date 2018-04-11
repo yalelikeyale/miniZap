@@ -11,17 +11,17 @@ const _podioSecret = process.env.podio_secret;
 const companyId = process.env.podio_company_id;
 const companyToken = process.env.podio_company_token;
 
-// // instantiate the SDK
-// const podio = new Podio({
-//     authType: 'app',
-//     clientId: _podioId,
-//     clientSecret: _podioSecret
-// });
+// instantiate the SDK
+const podio = new Podio({
+    authType: 'app',
+    clientId: _podioId,
+    clientSecret: _podioSecret
+});
 
-// podioRouter.use(require('podio-js').middleware({
-//   clientId: _podioId,
-//   clientSecret: _podioSecret
-// }));
+podioRouter.use(require('podio-js').middleware({
+  clientId: _podioId,
+  clientSecret: _podioSecret
+}));
 
 
 podioRouter.get('/', (req,res)=>{

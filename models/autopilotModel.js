@@ -7,7 +7,7 @@
 // const AutoPilot = new AutoPilotConstructor({"api_key":process.env.autopilot_key})
 // const AutoLibrary = new autopilot(AutoPilot.api_key);
 
-// Destination.prototype.addContactToJourney = function(){
+// AutoPilot.prototype.addContactToJourney = function(){
 	
 // }
 
