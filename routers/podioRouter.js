@@ -18,6 +18,13 @@ const podio = new Podio({
     clientSecret: _podioSecret
 });
 
+const getContactDetails = (field)=>{
+  console.log(field);
+  if(field && field.type && field.type==='email'){
+    console.log(field.values[0].value);
+  }
+}
+
 const getItemDetails = (item_id)=>{
   console.log('made it into get item details')
   podio.authenticateWithApp(companyId, companyToken, (err) => {
@@ -26,7 +33,9 @@ const getItemDetails = (item_id)=>{
       console.log('made it through authentication');
       // res.status(200).send('made it through authentication')
       podio.request('GET', `/item/${item_id}`)
-        .then(response=>{console.log(response.external_id); res.status(200).end()});
+        .then(response=>{
+          response.fields.map()
+        });
     }).catch(err => {
       res.status(500).send('something went wrong');
     });
