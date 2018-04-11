@@ -18,7 +18,7 @@ const podio = new Podio({
     clientSecret: _podioSecret
 });
 
-const getItemDetails(item_id)=>{
+const getItemDetails = (item_id)=>{
   console.log('made it into get item details')
   podio.authenticateWithApp(companyId, companyToken, (err) => {
     if (err) throw new Error(err);
