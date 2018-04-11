@@ -7,6 +7,7 @@ const {Users} = require('../models');
 const userRouter = express.Router();
 const jsonParser = bodyParser.json();
 
+//to access with jwtauth, you need to pass a users jwt token with the header Authorization + value of Bearer {jwttoken}
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 userRouter.use(jsonParser);

@@ -44,40 +44,52 @@ const extractStreams = (subscription)=>{
 		})
 }
 
-feedlyRouter.get('/', jsonParser,(req,res)=>{
-	const options = {
-		uri:'http://cloud.feedly.com/v3/subscriptions',
-	 	headers:{
-			Authorization: oAuth
-		},
-		json:true
+function loaderFunction(destination){
+	if(destination==='airtable'){
+		return '../models/airModel'
 	}
-	request.get(options).then(response=>{
-		const streams = response.map(extractStreams)
-		return Promise.all(streams)
-			.then(responses=>{
-				return responses
-			})
-			.catch(err=>{
-				console.log(err);
-			})
-	})
-	.then(responses=>{
-		responses.forEach(response=>{
-			const entries = responses.map(extractEntries);
-			return Promise.all(entries)
-				.then(responses=>{
-					return responses
-				})
-		})
-	})
-	.then(responses=>{
-		console.log(responses)
-	})
-	.catch(err=>{
-		console.log(err);
-	})
-	res.status(200).send('request received');
+}
+
+feedlyRouter.get('/', jsonParser,(req,res)=>{
+	const {Airtable, Mongo, Redshift} = require(loaderFunction(req.destination))
+	if(!(Airtable==null)){
+
+	}
+	console.log(Destination)
+	Destination.create()
+	// const options = {
+	// 	uri:'http://cloud.feedly.com/v3/subscriptions',
+	//  	headers:{
+	// 		Authorization: oAuth
+	// 	},
+	// 	json:true
+	// }
+	// request.get(options).then(response=>{
+	// 	const streams = response.map(extractStreams)
+	// 	return Promise.all(streams)
+	// 		.then(responses=>{
+	// 			return responses
+	// 		})
+	// 		.catch(err=>{
+	// 			console.log(err);
+	// 		})
+	// })
+	// .then(responses=>{
+	// 	responses.forEach(response=>{
+	// 		const entries = responses.map(extractEntries);
+	// 		return Promise.all(entries)
+	// 			.then(responses=>{
+	// 				return responses
+	// 			})
+	// 	})
+	// })
+	// .then(responses=>{
+	// 	console.log(responses)
+	// })
+	// .catch(err=>{
+	// 	console.log(err);
+	// })
+	// res.status(200).send('request received');
 });
 
 

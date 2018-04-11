@@ -3,9 +3,9 @@
 const {Destinations} = require('../models')
 
 function checkConnections (req, res, next) {
-	const user_name = req.header(user);
-	const source_name = req.header(source);
-	Destinations.find({user_name, source_name})
+	const user_name = req.headers.user;
+	const source_name = req.headers.source;
+	Destinations.findOne({user_name, source_name})
 		.then(response=>{
 			if(!(response && response.destination)){
 				if(!(count===1)){

@@ -26,7 +26,7 @@ const companyToken = process.env.podio_company_token;
 
 podioRouter.get('/', (req,res)=>{
     // get the app ID and Token for appAuthentication
-    res.status(201).send('made it into podio get function')
+    res.status(201).send('made it into podio get function');
   });
 
 podioRouter.post('/companies', jsonParser, (req,res)=>{

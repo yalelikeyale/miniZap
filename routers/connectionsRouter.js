@@ -9,6 +9,7 @@ const jsonParser = bodyParser.json();
 
 connectionsRouter.use(jsonParser);
 
+//to access with jwtauth, you need to pass a users jwt token with the header Authorization + value of Bearer {jwttoken}
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 //need access to the users id possibly stored as session data? cookies?
