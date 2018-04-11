@@ -34,7 +34,7 @@ const getItemDetails = (item_id)=>{
       // res.status(200).send('made it through authentication')
       podio.request('GET', `/item/${item_id}`)
         .then(response=>{
-          response.fields.map()
+          response.fields.map(getContactDetails)
         });
     }).catch(err => {
       res.status(500).send('something went wrong');
