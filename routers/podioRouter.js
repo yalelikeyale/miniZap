@@ -26,7 +26,7 @@ const getItemDetails = (item_id)=>{
       console.log('made it through authentication');
       // res.status(200).send('made it through authentication')
       podio.request('GET', `/item/${item_id}`)
-        .then(response=>{console.log(response); res.status(200).end()});
+        .then(response=>{console.log(response.external_id); res.status(200).end()});
     }).catch(err => {
       res.status(500).send('something went wrong');
     });
