@@ -49,7 +49,7 @@ const getItemDetails = (item_id)=>{
           autopilot.contacts.upsert(userObj)
           .then(result=>{
             console.log(result);
-            autopilot.journeys.add(001, userObj.Email, (err,resp)=>{
+            autopilot.journeys.add('0001', userObj.Email, (err,resp)=>{
               if(err){
                 console.error(err);
               }
