@@ -48,12 +48,11 @@ const getItemDetails = (item_id)=>{
           response.fields.map(getContactDetails)
           autopilot.contacts.upsert(userObj)
           .then(result=>{
-            console.log(result);
             autopilot.journeys.add('0001', userObj.Email, (err,resp)=>{
               if(err){
                 console.error(err);
               }
-              console.log(resp);
+              console.log(`added ${userObj.FirstName} to journey starting with trigger 0001`);
             })
 
           })
