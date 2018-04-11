@@ -19,7 +19,6 @@ const podio = new Podio({
 });
 
 const getContactDetails = (field)=>{
-  console.log(field);
   if(field && field.type && field.type==='email'){
     console.log(field.values[0].value);
   }
