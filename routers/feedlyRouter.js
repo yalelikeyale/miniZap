@@ -8,16 +8,19 @@ const oAuth = 'OAuth '+feedly_secret;
 
 
 const extractEntries = (subscriptionEntries)=>{
-	const entryIds = subscriptionEntries.ids.map(encodeURI)
+	// const entryIds = subscriptionEntries.ids.map(encodeURI)
+	// entryIds.forEach(entryId=>{
+
+	// });
+	const entryId = encodeURI(subscriptionEntries.ids[0])
 	const options = {
-		uri:'http://cloud.feedly.com/v3/entries/.mget',
+		uri:`http://cloud.feedly.com/v3/entries/${entryId}`,
 		headers:{
 			Authorization: oAuth
 		},
-		body:entryIds,
 		json:true
 	}
-	return request.post(options)
+	return request.get(options)
 		.then(response=>{
 			return response
 		})
@@ -51,46 +54,46 @@ const extractStreams = (subscription)=>{
 // }
 
 feedlyRouter.get('/', jsonParser,(req,res)=>{
-	res.status(200).send('endpoint is working')
+	// res.status(200).send('endpoint is working')
 	// const {Airtable, Mongo, Redshift} = require(loaderFunction(req.destination))
 	// if(!(Airtable==null)){
 
 	// }
 	// console.log(Destination)
 	// Destination.create()
-	// const options = {
-	// 	uri:'http://cloud.feedly.com/v3/subscriptions',
-	//  	headers:{
-	// 		Authorization: oAuth
-	// 	},
-	// 	json:true
-	// }
-	// request.get(options).then(response=>{
-	// 	const streams = response.map(extractStreams)
-	// 	return Promise.all(streams)
-	// 		.then(responses=>{
-	// 			return responses
-	// 		})
-	// 		.catch(err=>{
-	// 			console.log(err);
-	// 		})
-	// })
-	// .then(responses=>{
-	// 	responses.forEach(response=>{
-	// 		const entries = responses.map(extractEntries);
-	// 		return Promise.all(entries)
-	// 			.then(responses=>{
-	// 				return responses
-	// 			})
-	// 	})
-	// })
-	// .then(responses=>{
-	// 	console.log(responses)
-	// })
-	// .catch(err=>{
-	// 	console.log(err);
-	// })
-	// res.status(200).send('request received');
+	const options = {
+		uri:'http://cloud.feedly.com/v3/subscriptions',
+	 	headers:{
+			Authorization: oAuth
+		},
+		json:true
+	}
+	request.get(options).then(response=>{
+		const streams = response.map(extractStreams)
+		return Promise.all(streams)
+			.then(responses=>{
+				return responses
+			})
+			.catch(err=>{
+				console.log(err);
+			})
+	})
+	.then(responses=>{
+		responses.forEach(response=>{
+			const entries = responses.map(extractEntries);
+			return Promise.all(entries)
+				.then(responses=>{
+					return responses
+				})
+		})
+	})
+	.then(responses=>{
+		console.log(responses)
+	})
+	.catch(err=>{
+		console.log(err);
+	})
+	res.status(200).send('request received');
 });
 
 
