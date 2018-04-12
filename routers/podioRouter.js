@@ -66,7 +66,6 @@ const getItemDetails = (item_id)=>{
 
 
 podioRouter.post('/companies', jsonParser, (req,res)=>{
-  console.log(req.body.item_id);
   let item_id = req.body.item_id;
   getItemDetails(item_id);
   res.status(201).end();

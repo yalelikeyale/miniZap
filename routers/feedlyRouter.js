@@ -44,19 +44,20 @@ const extractStreams = (subscription)=>{
 		})
 }
 
-function loaderFunction(destination){
-	if(destination==='airtable'){
-		return '../models/airModel'
-	}
-}
+// function loaderFunction(destination){
+// 	if(destination==='airtable'){
+// 		return '../models/airModel'
+// 	}
+// }
 
 feedlyRouter.get('/', jsonParser,(req,res)=>{
-	const {Airtable, Mongo, Redshift} = require(loaderFunction(req.destination))
-	if(!(Airtable==null)){
+	res.status(200).send('endpoint is working')
+	// const {Airtable, Mongo, Redshift} = require(loaderFunction(req.destination))
+	// if(!(Airtable==null)){
 
-	}
-	console.log(Destination)
-	Destination.create()
+	// }
+	// console.log(Destination)
+	// Destination.create()
 	// const options = {
 	// 	uri:'http://cloud.feedly.com/v3/subscriptions',
 	//  	headers:{

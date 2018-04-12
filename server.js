@@ -27,9 +27,9 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 app.use('/user_login', loginRouter);
 app.use('/users',       userRouter);
-app.use('/feedly', checkConnections, feedlyRouter);
-app.use('/podio', podioRouter);
-app.use('/create_connection', connectionsRouter);
+app.use('/feedly',    feedlyRouter);
+app.use('/podio',      podioRouter);
+app.use('/create_connection',   connectionsRouter);
 
 let server;
 
