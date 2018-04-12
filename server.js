@@ -29,6 +29,7 @@ app.use('/user_login', loginRouter);
 app.use('/users',       userRouter);
 app.use('/feedly',    feedlyRouter);
 app.use('/podio',      podioRouter);
+app.use('/autopilot',      autopilotRouter);
 app.use('/create_connection',   connectionsRouter);
 
 let server;
