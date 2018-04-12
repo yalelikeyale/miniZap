@@ -8,15 +8,11 @@ function checkConnections (req, res, next) {
 	Destinations.findOne({user_name, source_name})
 		.then(response=>{
 			if(!(response && response.destination)){
-				if(!(count===1)){
-				  //don't fully understand this. would rather tell the client they made an invalid request here
-		          // return Promise.reject({
-		          //   code: 422,
-		          //   reason: 'ValidationError',
-		          //   message: "User hasn't selected a destination for " + source_name,
-		          //   location: 'source_name'
-		          // });			
-		          res.status(422).send("User hasn't selected a destination for " + source_name).end()	
+				if(!(count===1)){		
+		          res.status(500).json({
+		          	error:`User hasn't selected a destination for ${source_name}`,
+		          	reason:'ValidationError'
+		          })
 				}
 			}
 			req.destination = response.destination;

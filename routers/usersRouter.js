@@ -82,7 +82,7 @@ userRouter.post('/',jwtAuth, (req, res) => {
     .count()
     .then(count => {
       if (count > 0) {
-        // There is an existing user with the same username
+        There is an existing user with the same username
         return Promise.reject({
           code: 422,
           reason: 'ValidationError',
