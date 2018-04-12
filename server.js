@@ -10,7 +10,7 @@ const {checkConnections, corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
 const {localStrategy, jwtStrategy } = require('./authentication');
-const {loginRouter, userRouter, podioRouter, feedlyRouter, connectionsRouter} = require('./routers');
+const {loginRouter, userRouter, podioRouter, feedlyRouter, connectionsRouter, autopilotRouter} = require('./routers');
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
