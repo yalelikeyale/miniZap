@@ -10,7 +10,7 @@ const {checkConnections, corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
 const {localStrategy, jwtStrategy } = require('./authentication');
-const {loginRouter, segmentRouter, userRouter, podioRouter, feedlyRouter, connectionsRouter} = require('./routers');
+const {loginRouter, userRouter, podioRouter, feedlyRouter, connectionsRouter} = require('./routers');
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
@@ -27,13 +27,9 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 app.use('/user_login', loginRouter);
 app.use('/users',       userRouter);
-app.use('/segment',  segmentRouter);
 app.use('/feedly', checkConnections, feedlyRouter);
 app.use('/podio', podioRouter);
 app.use('/create_connection', connectionsRouter);
-// app.use('*', (req, res) => {
-//   return res.status(404).json({ message: 'Not Found' });
-// });
 
 let server;
 

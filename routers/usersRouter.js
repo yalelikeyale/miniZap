@@ -73,8 +73,6 @@ userRouter.post('/',jwtAuth, (req, res) => {
   }
 
   let {username, password, first_name = '', last_name = ''} = req.body;
-  // Username and password come in pre-trimmed, otherwise we throw an error
-  // before this
   first_name = first_name.trim();
   last_name = last_name.trim();
 
@@ -82,15 +80,14 @@ userRouter.post('/',jwtAuth, (req, res) => {
     .count()
     .then(count => {
       if (count > 0) {
-        There is an existing user with the same username
-        return Promise.reject({
+        const error = {
           code: 422,
           reason: 'ValidationError',
           message: 'Username already taken',
           location: 'username'
-        });
+        }
+        res.status(422).json(error);
       }
-      // If there is no existing user, hash the password
       return Users.hashPassword(password);
     })
     .then((hash) => {
