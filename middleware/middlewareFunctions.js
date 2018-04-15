@@ -2,26 +2,26 @@
 //based on that information, the endpoint will know which destination object to use 
 // const {Podio, Pilot} = require('../models')
 
-// function checkConnections (req, res, next) {
-// 	const user_name = req.headers.user;
-// 	const source_name = req.headers.source;
-// 	Destinations.findOne({user_name, source_name})
-// 		.then(response=>{
-// 			if(!(response && response.destination)){
-// 				if(!(count===1)){		
-// 		          res.status(500).json({
-// 		          	error:`User hasn't selected a destination for ${source_name}`,
-// 		          	reason:'ValidationError'
-// 		          })
-// 				}
-// 			}
-// 			req.destination = response;
-// 			next();
-// 		})
-// 		.catch(error=>{
-// 			res.status(422).send("User hasn't selected a destination for " + source_name)
-// 		})
-// }
+function checkConnections (req, res, next) {
+	const user_name = req.headers.user;
+	const source_name = req.headers.source;
+	Destinations.findOne({company, source_name})
+		.then(response=>{
+			if(!(response && response.destination)){
+				if(!(count===1)){		
+		          res.status(500).json({
+		          	error:`User hasn't selected a destination for ${source_name}`,
+		          	reason:'ValidationError'
+		          })
+				}
+			}
+			req.destination = response;
+			next();
+		})
+		.catch(error=>{
+			res.status(422).send("User hasn't selected a destination for " + source_name)
+		})
+}
 
 function checkDestination (req, res, next) {
 	if('autopilot' in req.body){
