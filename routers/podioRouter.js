@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const rp = require('request-promise');
 const Podio = require('podio-js').api;
+const {trafficControl} = require('../gateWays')
 
 const _podioId = process.env.podio_id;
 const _podioSecret = process.env.podio_secret;
@@ -31,7 +32,6 @@ const getContactDetails = (field)=>{
 }
 
 const getItemDetails = (item_id)=>{
-  console.log('made it into get item details')
   podio.authenticateWithApp(companyId, companyToken, (err) => {
     if (err) throw new Error(err);
     podio.isAuthenticated().then(() => {
@@ -41,6 +41,7 @@ const getItemDetails = (item_id)=>{
         .then(response=>{
           response.fields.map(getContactDetails)
           //send to autopilot
+          trafficControl.autopilot({company:'digivest',source:'podio'},userObj)
         })
         .catch(err=>{console.log(err)});
     }).catch(err => {

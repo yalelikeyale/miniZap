@@ -1,9 +1,9 @@
 const {Pilot} = require('../models')
 
 const destLookUp = {
-	autopilot:function(destObj){
+	autopilot:(destObj)=>{
 		console.log('made it into destLookUp autopilot function');
-		const requiredFields = ['source', 'pilot_key', 'trigger'];
+		const requiredFields = ['source', 'pilot_key', 'trigger', 'company'];
     	const missingField = requiredFields.find(field => !(field in destObj));
         if (missingField) {
     		res.status(422).json({
@@ -12,9 +12,10 @@ const destLookUp = {
         	location: missingField
     	    });
   		}
-		const {source, pilot_key, trigger} = destObj
+		const {source, pilot_key, trigger, company} = destObj
 		return Pilot.create({
 			source,
+			company,
 			pilot_key,
 			trigger
 		})

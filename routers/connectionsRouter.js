@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const {Users, Podio, Pilot} = require('../models');
-const {destLookUp} = require('../libraries/destinationTree')
+const {destLookUp} = require('../gateWays')
 const {checkDestination} = require('../middleware')
 
 const connectionsRouter = express.Router();
@@ -46,7 +46,7 @@ connectionsRouter.post('/podio', [jwtAuth,checkDestination], (req,res)=>{
 			})
 			.then(newPodio=>{
 				if(newPodio){
-					const newDestObj = Object.assign({source:'podio'}, req.body[req.destination])
+					const newDestObj = Object.assign({source:'podio',company:company}, req.body[req.destination])
 					destLookUp[req.destination](newDestObj)
 				}
 			})
