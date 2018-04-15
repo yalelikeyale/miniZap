@@ -3,32 +3,38 @@ const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const {Users} = require('../models')
 
-const loginRouter = express.Router();
+const signinRouter = express.Router();
 
 const createAuthToken = function(user) {
   return jwt.sign({user}, process.env.JWT_SECRET, {
-    subject: user.username,
+    subject: user.company_name,
     algorithm: 'HS256'
   });
 };
 
 const localAuth = passport.authenticate('local', {session: false});
-loginRouter.use(bodyParser.json());
+signinRouter.use(bodyParser.json());
 
 
-// The user provides a username and password to login
-loginRouter.post('/', localAuth, (req, res) => {
+// The user provides a company_name and password to login
+signinRouter.post('/', localAuth, (req, res) => {
+  console.log('made it through local auth')
   const authToken = createAuthToken(req.user.serialize());
-  res.json({authToken});
+  const company_name = req.user.company_name
+  const updated = {"token":authToken}
+  Users.findOneAndUpdate({company_name},{ $set: updated }, { new: true })
+  	.then(updatedUser=>{res.json(authToken)})
+  	.catch(err=>{res.status(500).send('Failed to provide user token')})
 });
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // The user exchanges a valid JWT for a new one with a later expiration
-loginRouter.post('/refresh', jwtAuth, (req, res) => {
+signinRouter.post('/refresh', jwtAuth, (req, res) => {
   const authToken = createAuthToken(req.user);
   res.json({authToken});
 });
 
-module.exports = {loginRouter};
+module.exports = {signinRouter};

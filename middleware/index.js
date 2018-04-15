@@ -1,4 +1,4 @@
 'use strict';
-const { checkConnections,corsMiddle } = require('./middlewareFunctions');
+const { checkConnections, checkSource, checkDestination, corsMiddle } = require('./middlewareFunctions');
 
-module.exports = { checkConnections,corsMiddle };
+module.exports = { checkConnections, checkSource, checkDestination, corsMiddle };

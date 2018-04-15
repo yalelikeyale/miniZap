@@ -7,13 +7,13 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const localStrategy = new LocalStrategy((username, password, callback) => {
   let user;
-  Users.findOne({ username: username })
+  Users.findOne({ company_name: username })
     .then(_user => {
       user = _user;
       if (!user) {
         return Promise.reject({
           reason: 'LoginError',
-          message: 'Incorrect username or password'
+          message: 'Incorrect company or password'
         });
       }
       return user.validatePassword(password);

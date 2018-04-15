@@ -1,6 +1,6 @@
 const config = require('dotenv').config()
 const PORT = process.env.PORT || 8080;
-const MLAB_URI = process.env.MLAB_URI || 'mongodb://localhost/users';
+const MLAB_URI = process.env.MLAB_URI;
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -10,7 +10,7 @@ const {checkConnections, corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
 const {localStrategy, jwtStrategy } = require('./authentication');
-const {loginRouter, userRouter, podioRouter, feedlyRouter, connectionsRouter, autopilotRouter} = require('./routers');
+const {signinRouter, userRouter, podioRouter, feedlyRouter, connectionsRouter, autopilotRouter, segmentRouter} = require('./routers');
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
@@ -25,12 +25,13 @@ app.get('/', (req, res) => {
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-app.use('/user_login', loginRouter);
+app.use('/login', signinRouter);
 app.use('/users',       userRouter);
 app.use('/feedly',    feedlyRouter);
 app.use('/podio',      podioRouter);
-app.use('/autopilot',      autopilotRouter);
-app.use('/create_connection',   connectionsRouter);
+app.use('/autopilot',    autopilotRouter);
+app.use('/segment',        segmentRouter);
+app.use('/connect', connectionsRouter);
 
 let server;
 
