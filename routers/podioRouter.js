@@ -11,9 +11,6 @@ const _podioSecret = process.env.podio_secret;
 const companyId = process.env.podio_company_id;
 const companyToken = process.env.podio_company_token;
 
-let Autopilot = require('autopilot-api');
-let autopilot = new Autopilot(process.env.autopilot);
-
 const userObj = {};
 
 // instantiate the SDK
@@ -25,13 +22,10 @@ const podio = new Podio({
 
 const getContactDetails = (field)=>{
   if(field && field.type && field.type==='email'){
-    console.log(field.values[0].value);
     userObj.Email = field.values[0].value;
   } else if (field && field.label && field.label==='Send Surname'){
-    console.log(field.values[0].value);
     userObj.LastName = field.values[0].value;
   } else if (field && field.label && field.label==='Send Firstname'){
-    console.log(field.values[0].value);
     userObj.FirstName = field.values[0].value;
   }
 }
@@ -46,20 +40,11 @@ const getItemDetails = (item_id)=>{
       podio.request('GET', `/item/${item_id}`)
         .then(response=>{
           response.fields.map(getContactDetails)
-          autopilot.contacts.upsert(userObj)
-          .then(result=>{
-            autopilot.journeys.add('0001', userObj.Email, (err,resp)=>{
-              if(err){
-                console.error(err);
-              }
-              console.log(`added ${userObj.FirstName} to journey starting with trigger 0001`);
-            })
-
-          })
-          .catch(err=>{console.error(err)})
-        });
+          //send to autopilot
+        })
+        .catch(err=>{console.log(err)});
     }).catch(err => {
-      res.status(500).send('something went wrong');
+      res.status(500).send('failed to authenticate podio');
     });
   });
 }

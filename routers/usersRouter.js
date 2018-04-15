@@ -12,27 +12,25 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 userRouter.use(jsonParser);
 // Post to register a new user
-userRouter.post('/',jwtAuth, (req, res) => {
-  const requiredFields = ['username', 'password'];
+userRouter.post('/', (req, res) => {
+  const requiredFields = ['company_name', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
-    return res.status(422).json({
-      code: 422,
+    res.status(422).json({
       reason: 'ValidationError',
       message: 'Missing field',
       location: missingField
     });
   }
 
-  const explicityTrimmedFields = ['username', 'password'];
+  const explicityTrimmedFields = ['company_name', 'password'];
   const nonTrimmedField = explicityTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
   );
 
   if (nonTrimmedField) {
-    return res.status(422).json({
-      code: 422,
+    res.status(422).json({
       reason: 'ValidationError',
       message: 'Cannot start or end with whitespace',
       location: nonTrimmedField
@@ -40,7 +38,7 @@ userRouter.post('/',jwtAuth, (req, res) => {
   }
 
   const sizedFields = {
-    username: {
+    company_name: {
       min: 6
     },
     password: {
@@ -60,8 +58,7 @@ userRouter.post('/',jwtAuth, (req, res) => {
   );
 
   if (tooSmallField || tooLargeField) {
-    return res.status(422).json({
-      code: 422,
+    res.status(422).json({
       reason: 'ValidationError',
       message: tooSmallField
         ? `Must be at least ${sizedFields[tooSmallField]
@@ -72,27 +69,27 @@ userRouter.post('/',jwtAuth, (req, res) => {
     });
   }
 
-  let {username, password, first_name = '', last_name = ''} = req.body;
+  let {company_name, password, first_name = '', last_name = ''} = req.body;
   first_name = first_name.trim();
   last_name = last_name.trim();
 
-  return Users.find({username})
+
+  return Users.find({company_name})
     .count()
     .then(count => {
       if (count > 0) {
         const error = {
           code: 422,
           reason: 'ValidationError',
-          message: 'Username already taken',
-          location: 'username'
+          message: 'User Already Exists'
         }
-        res.status(422).json(error);
+        Promise.reject(error);
       }
       return Users.hashPassword(password);
     })
     .then((hash) => {
       return Users.create({
-        username,
+        company_name,
         password: hash,
         first_name,
         last_name
@@ -107,15 +104,15 @@ userRouter.post('/',jwtAuth, (req, res) => {
       }
       res.status(500).json({code: 500, message: 'Internal server error'});
     });
-});
+})
 
 //put to update a user ie. change password/ permissions
-userRouter.put('/:username',jwtAuth,(req,res)=>{
-  let username = req.params.username;
-  if(!(username && username.length > 6)){
-    res.status(400).send('Please Enter a Valid Username');
+userRouter.put('/:company_name',(req,res)=>{
+  let company_name = req.params.company_name;
+  if(!(company_name && company_name.length > 6)){
+    res.status(400).send('Please Enter a Valid company_name');
   }
-  const stringFields = ['username', 'password', 'first_name', 'last_name'];
+  const stringFields = ['company_name', 'password', 'first_name', 'last_name'];
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   );
@@ -127,7 +124,7 @@ userRouter.put('/:username',jwtAuth,(req,res)=>{
       location: nonStringField
     });
   }
-  const updateableFields = ['username', 'password'];
+  const updateableFields = ['company_name', 'password'];
   const nonUpdateableField = updateableFields.find(
     field => {field in req.body}
   );
@@ -145,47 +142,47 @@ userRouter.put('/:username',jwtAuth,(req,res)=>{
       updated[field] = req.body[field];
     }
   });
-  return Users.find({username})
+  return Users.find({company_name})
       .count()
       .then(count => {
         if(!(count===1)){
           return Promise.reject({
             code: 422,
             reason: 'ValidationError',
-            message: 'Username not Found',
-            location: 'username'
+            message: 'company_name not Found',
+            location: 'company_name'
           });
         }
         return null
       })
       .then(()=>{
-        Users.findOneAndUpdate({username},{ $set: updated }, { new: true })
+        Users.findOneAndUpdate({company_name},{ $set: updated }, { new: true })
         .then(updatedUser => {res.status(201).json(updatedUser.serialize())})
         .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
       })
       .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
 });
 
-userRouter.delete('/:username',jwtAuth,  (req,res)=>{
-  let username = req.params.username 
-  if(!(username && username.length>6)){
-    res.status(400).send('Please Enter a Valid Username');
+userRouter.delete('/:company_name',  (req,res)=>{
+  let company_name = req.params.company_name 
+  if(!(company_name && company_name.length>6)){
+    res.status(400).send('Please Enter a Valid company_name');
   }
-  Users.find({username})
+  Users.find({company_name})
       .count()
       .then(count => {
         if(!(count===1)){
           return Promise.reject({
             code: 422,
             reason: 'ValidationError',
-            message: 'Username not Found',
-            location: 'username'
+            message: 'company_name not Found',
+            location: 'company_name'
           });
         }
         return null
       })
       .then(()=>{
-        Users.find({username})
+        Users.find({company_name})
           .remove()
           .then(()=>{
             res.status(201).send('User Deleted');
@@ -193,11 +190,17 @@ userRouter.delete('/:username',jwtAuth,  (req,res)=>{
       })
 });
 
-userRouter.get('/',jwtAuth,(req, res) => {
+userRouter.get('/',(req, res) => {
   return Users.find()
     .then(users => res.json(users.map(user => user.serialize())))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
+
+// userRouter.delete('/',(req, res) => {
+//   return Users.remove({})
+//     .then(response => res.send(response))
+//     .catch(err => res.status(500).json({message: 'Internal server error'}));
+// });
 
 
 module.exports = {userRouter};
