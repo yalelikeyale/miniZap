@@ -15,14 +15,13 @@ connectionsRouter.use(jsonParser);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 
-connectionsRouter.post('/podio', [jwtAuth,checkDestination], (req,res)=>{
+connectionsRouter.post('/podio', [jwtAuth, checkDestination], (req,res)=>{
 	const {app_id, app_token, bot_id, podio_secret, podio_access} = req.body
-	const company = req.user.company_name
-
+	const company = req.user
 	Podio.find({company, bot_id})
 			.count()
 			.then(count=>{
-				if(count>1){
+				if(count>0){
 		          return Promise.reject({
 		            code: 422,
 		            reason: 'ValidationError',

@@ -90,9 +90,7 @@ userRouter.post('/', (req, res) => {
     .then((hash) => {
       return Users.create({
         company_name,
-        password: hash,
-        first_name,
-        last_name
+        password: hash
       });
     })
     .then(user => {
