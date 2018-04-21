@@ -31,7 +31,7 @@ const getContactDetails = (field)=>{
   }
 }
 
-const getItemDetails = (item_id)=>{
+const transferItem = (item_id, destination)=>{
   podio.authenticateWithApp(companyId, companyToken, (err) => {
     if (err) throw new Error(err);
     podio.isAuthenticated().then(() => {
@@ -41,7 +41,7 @@ const getItemDetails = (item_id)=>{
         .then(response=>{
           response.fields.map(getContactDetails)
           //send to autopilot
-          trafficControl.autopilot({company:'digivest',source:'podio'},userObj)
+          trafficControl[destination]({company:'digivest',source:'podio'},userObj)
         })
         .catch(err=>{console.log(err)});
     }).catch(err => {
@@ -50,11 +50,11 @@ const getItemDetails = (item_id)=>{
   });
 }
 
-podioRouter.post('/:appId/companies', jsonParser, (req,res)=>{
-  let {appId} = req.params
+podioRouter.post('/:company/companies', [jsonParser, ], (req,res)=>{
+  const destination = req.destination
   if(req.body.item_id){
     let item_id = req.body.item_id;
-    // getItemDetails(item_id);
+    transferItem(item_id, destination);
     res.status(201).end();
   } else {
     let {hook_id, code} = req.body

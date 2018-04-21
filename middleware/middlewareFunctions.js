@@ -1,6 +1,3 @@
-//write code that will add data to the request object with information about what destination to send the data to
-//based on that information, the endpoint will know which destination object to use 
-// const {Podio, Pilot} = require('../models')
 
 function checkConnections (req, res, next) {
 	const user_name = req.headers.user;
@@ -23,10 +20,20 @@ function checkConnections (req, res, next) {
 		})
 }
 
-function checkDestination (req, res, next) {
+//the connections router takes an object with the credentials of the source + the destination
+//this middleware checks that request to determine where to send the data
+function checkConnectionRequest (req, res, next) {
 	if('autopilot' in req.body){
 		req.destination = 'autopilot'
 		}
+	next()
+	}
+
+//requests to the podio endpoint will have the company in the req params, so this function will look up
+//what destination is associated with podio for that company
+function checkPodioRequest (req, res, next) {
+	const company = req.params.company;
+	
 	next()
 	}
 
@@ -41,4 +48,9 @@ function corsMiddle(req, res, next) {
 }
 
 //when exporting a function, in what instances do you need to wrap it with brackets
-module.exports = {corsMiddle, checkDestination};
+module.exports = {corsMiddle, checkConnectionRequest};
+
+
+
+
+

@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const {Users, Podio, Pilot} = require('../models');
+const {Users, Podio, Pilot, Destinations} = require('../models');
 const {destLookUp} = require('../gateWays')
 const {checkDestination} = require('../middleware')
 
@@ -49,7 +49,17 @@ connectionsRouter.post('/podio', [jwtAuth, checkDestination], (req,res)=>{
 					destLookUp[req.destination](newDestObj)
 				}
 			})
-			.then(newDest=>{res.status(201).json(newDest)})
+			.then(newDest=>{
+				Destinations.create({
+					company:company,
+					source:'podio',
+					destination:req.destination
+				})
+				.then(newDest=>{
+					res.status(201).json(newDest)
+				})
+				.catch(err=>{console.log(err)})
+			})
 		    .catch(err => {
 		      if (err.reason === 'ValidationError') {
 		        return res.status(err.code).json(err);
