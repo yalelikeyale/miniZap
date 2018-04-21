@@ -59,5 +59,12 @@ podioRouter.post('/companies', jsonParser, (req,res)=>{
   res.status(201).end();
 })
 
+podioRouter.post('/hook_test', jsonParser, (req,res)=>{
+  console.log(req.body)
+  console.log(req.header)
+  // getItemDetails(item_id);
+  res.status(201).end();
+})
+
 module.exports = {podioRouter};
 
