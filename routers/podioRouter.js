@@ -60,6 +60,8 @@ podioRouter.post('/companies', jsonParser, (req,res)=>{
 })
 
 podioRouter.post('/hook_test', jsonParser, (req,res)=>{
+  console.log(req.params.appId)
+  console.log(req.params)
   console.log(req.body)
   console.log(req.header)
   // getItemDetails(item_id);
