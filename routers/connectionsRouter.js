@@ -55,8 +55,8 @@ connectionsRouter.post('/podio', [jwtAuth, checkDestination], (req,res)=>{
 					source:'podio',
 					destination:req.destination
 				})
-				.then(newDest=>{
-					res.status(201).json(newDest)
+				.then(newDestConnection=>{
+					res.status(201).json(newDestConnection)
 				})
 				.catch(err=>{console.log(err)})
 			})
