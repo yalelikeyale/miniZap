@@ -3,7 +3,7 @@ const queryString = require('query-string');
 const podioRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-const rp = require('request-promise');
+const request = require('request-promise');
 const Podio = require('podio-js').api;
 const {trafficControl} = require('../gateWays')
 
@@ -50,22 +50,29 @@ const getItemDetails = (item_id)=>{
   });
 }
 
-
-podioRouter.post('/companies', jsonParser, (req,res)=>{
-  let item_id = req.body.item_id;
-  console.log(req.body)
-  console.log(req.header)
-  // getItemDetails(item_id);
-  res.status(201).end();
-})
-
-podioRouter.post('/:userId/hook_test', jsonParser, (req,res)=>{
-  console.log(req.params.appId)
-  console.log(req.params)
-  console.log(req.body)
-  console.log(req.header)
-  // getItemDetails(item_id);
-  res.status(201).end();
+podioRouter.post('/:appId/companies', jsonParser, (req,res)=>{
+  let {appId} = req.params
+  if(req.body.item_id){
+    let item_id = req.body.item_id;
+    // getItemDetails(item_id);
+    res.status(201).end();
+  } else {
+    let {hook_id, code} = req.body
+    settings = {
+      headers: {'content-type' : 'application/json'},
+      uri:`https://api.podio.com/hook/${hook_id}/verify/validate`,
+      body:{code}
+    }
+    request.post(settings)
+      .then(response=>{
+        console.log(response);
+        res.status(201).end();
+      })
+      .catch(err=>{
+        console.log(err)
+        res.status(500).end();
+      })
+    }
 })
 
 module.exports = {podioRouter};
