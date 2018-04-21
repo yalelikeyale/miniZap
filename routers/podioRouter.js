@@ -59,7 +59,7 @@ podioRouter.post('/companies', jsonParser, (req,res)=>{
   res.status(201).end();
 })
 
-podioRouter.post('/hook_test', jsonParser, (req,res)=>{
+podioRouter.post('/:userId/hook_test', jsonParser, (req,res)=>{
   console.log(req.params.appId)
   console.log(req.params)
   console.log(req.body)
