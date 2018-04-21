@@ -61,7 +61,7 @@ podioRouter.post('/:appId/companies', jsonParser, (req,res)=>{
     settings = {
       headers: {'content-type' : 'application/json'},
       uri:`https://api.podio.com/hook/${hook_id}/verify/validate`,
-      body:{code}
+      json:{code}
     }
     request.post(settings)
       .then(response=>{
