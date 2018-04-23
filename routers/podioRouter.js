@@ -10,13 +10,6 @@ const {checkPodioConnection} = require('../middleware')
 
 const userObj = {};
 
-// instantiate the SDK
-const podio = new Podio({
-    authType: 'app',
-    clientId: _podioId,
-    clientSecret: _podioSecret
-});
-
 const getContactDetails = (field)=>{
   if(field && field.type && field.type==='email'){
     userObj.Email = field.values[0].value;
@@ -27,8 +20,14 @@ const getContactDetails = (field)=>{
   }
 }
 
-const transferItem = (item_id, company, destination)=>{
-  podio.authenticateWithApp(companyId, companyToken, (err) => {
+const transferItem = (item_id, company, destination, podioCreds)=>{
+  // instantiate the SDK
+  const podio = new Podio({
+      authType: 'app',
+      clientId: podioCreds.bot_id,
+      clientSecret: podioCreds.podio_secret
+  });
+  podio.authenticateWithApp(podioCreds.app_id, podioCreds.app_token, (err) => {
     if (err) throw new Error(err);
     podio.isAuthenticated().then(() => {
       console.log('made it through authentication');
@@ -37,7 +36,7 @@ const transferItem = (item_id, company, destination)=>{
         .then(response=>{
           response.fields.map(getContactDetails)
           //send to autopilot
-          trafficControl[destination]({company:company},userObj)
+          trafficControl[destination]({company:company,source:'podio'},userObj)
         })
         .catch(err=>{console.log(err)});
     }).catch(err => {
@@ -46,12 +45,19 @@ const transferItem = (item_id, company, destination)=>{
   });
 }
 
+
 podioRouter.post('/:company/companies', [jsonParser, checkPodioConnection], (req,res)=>{
   const destination = req.destination
   const company = req.company
   if(req.body.item_id){
     let item_id = req.body.item_id;
-    transferItem(item_id, company, destination);
+    Podio.findOne({company})
+      .then(podioCreds=>{
+        transferItem(item_id, company, destination, podioCreds);
+      })
+      .catch(error=>{
+        console.log(error)
+      })
     res.status(201).end();
   } else {
     let {hook_id, code} = req.body
