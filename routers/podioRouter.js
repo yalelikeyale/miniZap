@@ -21,6 +21,7 @@ const getContactDetails = (field)=>{
 }
 
 const transferItem = (item_id, company, destination, podioCreds)=>{
+  console.log(item_id, company, destination, podioCreds);
   // instantiate the SDK
   const podio = new Podio({
       authType: 'app',
@@ -31,7 +32,6 @@ const transferItem = (item_id, company, destination, podioCreds)=>{
     if (err) throw new Error(err);
     podio.isAuthenticated().then(() => {
       console.log('made it through authentication');
-      // res.status(200).send('made it through authentication')
       podio.request('GET', `/item/${item_id}`)
         .then(response=>{
           response.fields.map(getContactDetails)
@@ -49,15 +49,10 @@ const transferItem = (item_id, company, destination, podioCreds)=>{
 podioRouter.post('/:company/companies', [jsonParser, checkPodioConnection], (req,res)=>{
   const destination = req.destination
   const company = req.company
+  const podioCreds = req.podioCreds
   if(req.body.item_id){
     let item_id = req.body.item_id;
-    Podio.findOne({company})
-      .then(podioCreds=>{
-        transferItem(item_id, company, destination, podioCreds);
-      })
-      .catch(error=>{
-        console.log(error)
-      })
+    transferItem(item_id, company, destination, podioCreds);
     res.status(201).end();
   } else {
     let {hook_id, code} = req.body

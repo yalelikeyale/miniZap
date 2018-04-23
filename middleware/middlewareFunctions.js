@@ -1,9 +1,9 @@
-const {Destinations} = require('../models')
+const {Destinations, Podio} = require('../models')
 
 function checkPodioConnection (req, res, next) {
   const company = req.params.company
-  const source_name = 'podio'
-	Destinations.findOne({company, source_name})
+  const source = 'podio'
+	Destinations.findOne({company, source})
 		.then(response=>{
 			if(!(response && response.destination)){
 		        res.status(500).json({
@@ -13,7 +13,12 @@ function checkPodioConnection (req, res, next) {
 			}
 			req.destination = response.destination
       		req.company = company
-			next();
+      		Podio.findOne({company})
+      			.then(podioCreds=>{
+      				req.podioCreds = podioCreds
+      				next()
+      			})
+      			.catch(error=>{console.log('podio creds search failed')})
 		})
 		.catch(error=>{
 			res.status(422).send("User hasn't selected a destination for " + source_name)
@@ -29,13 +34,13 @@ function checkConnectionRequest (req, res, next) {
 	next()
 	}
 
-// //requests to the podio endpoint will have the company in the req params, so this function will look up
-// //what destination is associated with podio for that company
-// function checkPodioRequest (req, res, next) {
-// 	const company = req.params.company;
+//requests to the podio endpoint will have the company in the req params, so this function will look up
+//what destination is associated with podio for that company
+function checkPodioRequest (req, res, next) {
+	const company = req.params.company;
 	
-// 	next()
-// 	}
+	next()
+	}
 
 function corsMiddle(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
