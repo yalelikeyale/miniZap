@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const {checkConnections, corsMiddle} = require('./middleware')
+const {corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
 const {localStrategy, jwtStrategy } = require('./authentication');
@@ -25,13 +25,13 @@ app.get('/', (req, res) => {
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-app.use('/login', signinRouter);
-app.use('/users',       userRouter);
-app.use('/feedly',    feedlyRouter);
-app.use('/podio',      podioRouter);
+app.use('/login',           signinRouter);
+app.use('/users',             userRouter);
+app.use('/feedly',          feedlyRouter);
+app.use('/podio',            podioRouter);
 app.use('/autopilot',    autopilotRouter);
 app.use('/segment',        segmentRouter);
-app.use('/connect', connectionsRouter);
+app.use('/connect',    connectionsRouter);
 
 let server;
 

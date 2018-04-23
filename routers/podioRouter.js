@@ -6,11 +6,7 @@ const jsonParser = bodyParser.json();
 const request = require('request-promise');
 const Podio = require('podio-js').api;
 const {trafficControl} = require('../gateWays')
-
-const _podioId = process.env.podio_id;
-const _podioSecret = process.env.podio_secret;
-const companyId = process.env.podio_company_id;
-const companyToken = process.env.podio_company_token;
+const {checkPodioConnection} = require('../middleware')
 
 const userObj = {};
 
@@ -31,7 +27,7 @@ const getContactDetails = (field)=>{
   }
 }
 
-const transferItem = (item_id, destination)=>{
+const transferItem = (item_id, company, destination)=>{
   podio.authenticateWithApp(companyId, companyToken, (err) => {
     if (err) throw new Error(err);
     podio.isAuthenticated().then(() => {
@@ -41,7 +37,7 @@ const transferItem = (item_id, destination)=>{
         .then(response=>{
           response.fields.map(getContactDetails)
           //send to autopilot
-          trafficControl[destination]({company:'digivest',source:'podio'},userObj)
+          trafficControl[destination]({company:company},userObj)
         })
         .catch(err=>{console.log(err)});
     }).catch(err => {
@@ -50,11 +46,12 @@ const transferItem = (item_id, destination)=>{
   });
 }
 
-podioRouter.post('/:company/companies', [jsonParser, ], (req,res)=>{
+podioRouter.post('/:company/companies', [jsonParser, checkPodioConnection], (req,res)=>{
   const destination = req.destination
+  const company = req.company
   if(req.body.item_id){
     let item_id = req.body.item_id;
-    transferItem(item_id, destination);
+    transferItem(item_id, company, destination);
     res.status(201).end();
   } else {
     let {hook_id, code} = req.body

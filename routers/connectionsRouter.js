@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const {Users, Podio, Pilot, Destinations} = require('../models');
 const {destLookUp} = require('../gateWays')
-const {checkDestination} = require('../middleware')
+const {checkConnectionRequest} = require('../middleware')
 
 const connectionsRouter = express.Router();
 const jsonParser = bodyParser.json();
@@ -15,9 +15,10 @@ connectionsRouter.use(jsonParser);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 
-connectionsRouter.post('/podio', [jwtAuth, checkDestination], (req,res)=>{
+connectionsRouter.post('/podio', [jwtAuth, checkConnectionRequest], (req,res)=>{
 	const {app_id, app_token, bot_id, podio_secret, podio_access} = req.body
 	const company = req.user
+	console.log(company);
 	Podio.find({company, bot_id})
 			.count()
 			.then(count=>{
@@ -45,7 +46,7 @@ connectionsRouter.post('/podio', [jwtAuth, checkDestination], (req,res)=>{
 			})
 			.then(newPodio=>{
 				if(newPodio){
-					const newDestObj = Object.assign({source:'podio',company:company}, req.body[req.destination])
+					const newDestObj = Object.assign({company:company}, req.body[req.destination])
 					destLookUp[req.destination](newDestObj)
 				}
 			})

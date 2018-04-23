@@ -1,18 +1,18 @@
+const {Destinations} = require('../models')
 
-function checkConnections (req, res, next) {
-	const user_name = req.headers.user;
-	const source_name = req.headers.source;
+function checkPodioConnection (req, res, next) {
+  const company = req.params.company
+  const source_name = 'podio'
 	Destinations.findOne({company, source_name})
 		.then(response=>{
 			if(!(response && response.destination)){
-				if(!(count===1)){		
-		          res.status(500).json({
-		          	error:`User hasn't selected a destination for ${source_name}`,
-		          	reason:'ValidationError'
-		          })
-				}
+		        res.status(500).json({
+		        	error:`User hasn't selected a destination for ${source_name}`,
+		        	reason:'ValidationError'
+		        })
 			}
-			req.destination = response;
+			req.destination = response.destination
+      		req.company = company
 			next();
 		})
 		.catch(error=>{
@@ -29,13 +29,13 @@ function checkConnectionRequest (req, res, next) {
 	next()
 	}
 
-//requests to the podio endpoint will have the company in the req params, so this function will look up
-//what destination is associated with podio for that company
-function checkPodioRequest (req, res, next) {
-	const company = req.params.company;
+// //requests to the podio endpoint will have the company in the req params, so this function will look up
+// //what destination is associated with podio for that company
+// function checkPodioRequest (req, res, next) {
+// 	const company = req.params.company;
 	
-	next()
-	}
+// 	next()
+// 	}
 
 function corsMiddle(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -48,7 +48,7 @@ function corsMiddle(req, res, next) {
 }
 
 //when exporting a function, in what instances do you need to wrap it with brackets
-module.exports = {corsMiddle, checkConnectionRequest};
+module.exports = {corsMiddle, checkConnectionRequest, checkPodioConnection};
 
 
 
