@@ -2,9 +2,12 @@ const express = require('express');
 const segmentRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-const Analytics = require('analytics-node');
-const {checkSegmentConnection} = require('../middleware')
+//need to move this over to traffic control
+// const Analytics = require('analytics-node');
 // const analytics = new Analytics(write_key);
+const {checkSegmentConnection} = require('../middleware')
+const {trafficControl} = require('../gateWays')
+
 
 
 segmentRouter.post('/:company/identify', jsonParser,(req,res)=>{
@@ -23,6 +26,8 @@ segmentRouter.post('/:company/identify', jsonParser,(req,res)=>{
 });
 
 segmentRouter.post('/:company/order-completed', [jsonParser, checkSegmentConnection], (req,res)=>{
+	const destination = req.destination
+	const company = req.company
 	const order = req.body;
 	const productsList = [];
 	if(('coupon_lines' in order)&&(order.coupon_lines.length>0)){
@@ -62,7 +67,7 @@ segmentRouter.post('/:company/order-completed', [jsonParser, checkSegmentConnect
 			}
 		}
 		//send to aws or segment
-		console.log(orderPayload)
+		trafficControl[destination].orderCreated({company}, orderPayload)
 		res.status(201).end();
 	}
 	res.status(400).end();

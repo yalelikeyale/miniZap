@@ -21,7 +21,7 @@ const destLookUp = {
 		.catch(error=>{console.log(error)})
 	},
 	aws:(destObj)=>{
-		const requiredFields = ['access_key', 'secret_key', 'company'];
+		const requiredFields = ['access_key', 'secret_key', 'region','bucket','company'];
     	const missingField = requiredFields.find(field => !(field in destObj));
         if (missingField) {
     		res.status(422).json({
@@ -30,12 +30,13 @@ const destLookUp = {
         	location: missingField
     	    });
   		}
-		const {access_key, secret_key, company} = destObj
-		console.log(access_key, secret_key, company)
+		const {access_key, secret_key, region, bucket, company} = destObj
 		return AWS.create({
 			company,
 			access_key,
-			secret_key
+			secret_key,
+			region,
+			bucket
 		})
 		.then(newAWS=>{console.log(newAWS);return newAWS})
 		.catch(error=>{console.log(error)})

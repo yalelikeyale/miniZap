@@ -21,8 +21,6 @@ const getContactDetails = (field)=>{
 }
 
 const transferItem = (item_id, company, destination, podioCreds)=>{
-  console.log(item_id, company, destination, podioCreds);
-  // instantiate the SDK
   const podio = new Podio({
       authType: 'app',
       clientId: podioCreds.bot_id,

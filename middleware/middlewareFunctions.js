@@ -1,8 +1,8 @@
 const {Destinations, Podio} = require('../models')
 
 function checkPodioConnection (req, res, next) {
-  const company = req.params.company
-  const source = 'podio'
+    const company = req.params.company
+    const source = 'podio'
 	Destinations.findOne({company, source})
 		.then(response=>{
 			if(!(response && response.destination)){
@@ -23,11 +23,11 @@ function checkPodioConnection (req, res, next) {
 		.catch(error=>{
 			res.status(500).send('Internal Server Error')
 		})
-}
+	}
 
 function checkSegmentConnection (req, res, next) {
-  const company = req.params.company
-  const source = 'woocom'
+    const company = req.params.company
+    const source = 'woocomm'
 	Destinations.findOne({company, source})
 		.then(response=>{
 			if(!(response && response.destination)){
@@ -38,11 +38,12 @@ function checkSegmentConnection (req, res, next) {
 			}
 			req.destination = response.destination
       		req.company = company
+      		next()
 		})
 		.catch(error=>{
 			res.status(500).send('Internal Server Error')
 		})
-}
+	}
 
 //the connections router takes an object with the credentials of the source + the destination
 //this middleware checks that request to determine where to send the data
