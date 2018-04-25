@@ -27,7 +27,6 @@ const trafficControl = {
 				  	const order_id = order.properties.order_id
 				  	const products = order.properties.products
 				  	delete order.properties['products']
-				  	console.log(order_id, products, order)
 				 	awsControl.start()
 					awsControl.uploadOrder(order, query, bucket)
 			    }
