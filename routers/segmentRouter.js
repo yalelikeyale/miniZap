@@ -67,7 +67,7 @@ segmentRouter.post('/:company/order-completed', [jsonParser, checkSegmentConnect
 			}
 		}
 		//send to aws or segment
-		trafficControl[destination].orderCreated({company}, orderPayload)
+		trafficControl[destination].orderCreated(company, orderPayload)
 		res.status(201).end();
 	}
 	res.status(400).end();

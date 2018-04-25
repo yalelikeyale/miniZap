@@ -7,6 +7,11 @@ const awsSchema = new mongoose.Schema({
 	secret_key:{type:String, required:true},
 	region:{type:String, required:true},
 	bucket:{type:String, required:true},
+	db_name:{type:String, required:true},
+	user:{type:String, required:true},
+	password:{type:String, required:true},
+	host:{type:String, required:true},
+	port:{type:Number, required:true},
 	company:{type:String, required:true},
 });
 

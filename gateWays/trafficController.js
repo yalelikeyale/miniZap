@@ -4,7 +4,8 @@ const {Pilot, AWS} = require('../models')
 
 const trafficControl = {
 	autopilot:(query, user)=>{
-		Pilot.find(query)
+		//fiddled with this need to correct
+		Pilot.findOne(query)
 		  .then(destination=>{
 		  	const autopilot = new AutoPilotConstructor({"api_key":destination.pilot_key,"trigger":destination.trigger})
 		  	autopilot.start()
@@ -13,10 +14,23 @@ const trafficControl = {
 	},
 	aws:{
 		orderCreated:(query, order)=>{
-			console.log('made it into order created traffic control')
-			AWS.find(query)
+			const company = query
+			AWS.findOne({company})
 			  .then(destination=>{
-			  	console.log(destination)
+			  	if(destination){
+			  		const {access_key, secret_key, region, bucket} = destination
+				  	const awsControl = new AWSConstructor({
+				  		"access_key":access_key,
+				  		"secret_key":secret_key,
+				  		"region":region
+				  	})
+				  	const order_id = order.properties.order_id
+				  	const products = order.properties.products
+				  	delete order.properties['products']
+				  	console.log(order_id, products, order)
+				 	awsControl.start()
+					awsControl.uploadOrder(order, query, bucket)
+			    }
 			  })
 			  .catch(err=>{console.log(err)})
 		}

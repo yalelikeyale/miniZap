@@ -1,30 +1,34 @@
 const AWS = require('aws-sdk');
 
-const AutoPilotConstructor = function Constructor(user_settings) {
-	this.trigger = user_settings.trigger
-	this.api_key = user_settings.api_key
+const AWSConstructor = function Constructor(user_settings) {
+	this.access_key = user_settings.access_key;
+	this.secret_key = user_settings.secret_key;
+  this.region = user_settings.region;
 };
 
 // const AutoPilot = new AutoPilotConstructor()
 
-AutoPilotConstructor.prototype.start = ()=>{
-	const autopilot = new Autopilot(AutoPilotConstructor.api_key)
+AWSConstructor.prototype.start = ()=>{
+  AWS.config = new AWS.Config();
+  AWS.config.accessKeyId = AWSConstructor.access_key;
+  AWS.config.secretAccessKey = AWSConstructor.secret_key;
+  AWS.config.region = AWSConstructor.region;
+  s3 = new AWS.S3();
 }
 
-AutoPilotConstructor.prototype.addContactToJourney = (user)=>{
-    autopilot.contacts.upsert(user)
-      .then(result=>{
-        autopilot.journeys.add('0001', user.Email, (err,resp)=>{
-          if(err){
-            console.error(err);
-          }
-          console.log(`added ${userObj.FirstName} to journey starting with trigger ${AutoPilot.trigger}`);
-        })
-
-      })
-      .catch(err=>{console.error(err)})
+AWSConstructor.prototype.uploadOrder = (order, company, bucket)=>{
+  const order_id = order.properties.order_id
+  const params = {
+      Body: JSON.stringify(order),
+      Bucket: bucket,
+      Key: `${company}_${order_id}.json`,
+  };
+  s3.upload(params, (err, data) => {
+      if(err)
+          console.log(err);
+      else
+          console.log("success");
+  });
 }
 
-
-
-module.exports = {AutoPilotConstructor}
+module.exports = {AWSConstructor}

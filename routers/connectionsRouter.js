@@ -45,6 +45,7 @@ connectionsRouter.post('/podio', [jwtAuth, checkConnectionRequest], (req,res)=>{
 			})
 			.then(newPodio=>{
 				if(newPodio){
+					//even if this fails, Destination gets created
 					const newDestObj = Object.assign({company:company}, req.body[req.destination])
 					destLookUp[req.destination](newDestObj)
 				}
