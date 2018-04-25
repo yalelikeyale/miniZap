@@ -3,26 +3,25 @@ const segmentRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const Analytics = require('analytics-node');
-// const write_key = process.env.segment_write;
-
 // const analytics = new Analytics(write_key);
 
 
-segmentRouter.post('/identify', jsonParser,(req,res)=>{
+segmentRouter.post('/:company/identify', jsonParser,(req,res)=>{
 	const userObj = req.body;
 	const userId = userObj.user_id
 	delete userObj.user_id
 	console.log(userObj)
 	if(userObj){
-		analytics.identify({userId:userId, traits:userObj});
+		// analytics.identify({userId:userId, traits:userObj});
+		// send to aws or segment
 		res.status(201).send('Identified')
 	} else {
-		analytics.identify({userId:userId});
+		//send to aws or segment
 		res.status(201).send('Identified')	
 	}
 });
 
-segmentRouter.post('/order-completed', jsonParser,(req,res)=>{
+segmentRouter.post('/:company/order-completed', jsonParser, (req,res)=>{
 	const order = req.body;
 	const productsList = [];
 	if(('coupon_lines' in order)&&(order.coupon_lines.length>0)){
@@ -61,13 +60,13 @@ segmentRouter.post('/order-completed', jsonParser,(req,res)=>{
 				products:productsList
 			}
 		}
-		analytics.track(orderPayload);
+		//send to aws or segment
 		res.status(201).end();
 	}
 	res.status(400).end();
 });
 
-segmentRouter.post('/order-updated', jsonParser, (req,res)=>{
+segmentRouter.post('/:company/order-updated', jsonParser, (req,res)=>{
 	const order = req.body;
 	const productsList = [];
 	if(('coupon_lines' in order)&&(order.coupon_lines.length>0)){
@@ -106,7 +105,7 @@ segmentRouter.post('/order-updated', jsonParser, (req,res)=>{
 				products:productsList
 			}
 		}
-		analytics.track(orderPayload);
+		//send to aws or segment
 		res.status(201).end();
 	}
 	res.status(400).end();

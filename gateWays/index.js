@@ -1,4 +1,4 @@
 'use strict';
 const {trafficControl} = require('./trafficController')
-const {destLookUp} = require('./destinationTree')
+const {destLookUp} = require('./destinationLookUp')
 module.exports = {trafficControl,destLookUp};

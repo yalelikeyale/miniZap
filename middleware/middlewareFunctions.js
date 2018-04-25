@@ -30,17 +30,12 @@ function checkPodioConnection (req, res, next) {
 function checkConnectionRequest (req, res, next) {
 	if('autopilot' in req.body){
 		req.destination = 'autopilot'
-		}
+	} else if ('aws' in req.body){
+		req.destination = 'aws'
+	} 
 	next()
 	}
 
-//requests to the podio endpoint will have the company in the req params, so this function will look up
-//what destination is associated with podio for that company
-function checkPodioRequest (req, res, next) {
-	const company = req.params.company;
-	
-	next()
-	}
 
 function corsMiddle(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
