@@ -21,7 +21,26 @@ function checkPodioConnection (req, res, next) {
       			.catch(error=>{console.log('podio creds search failed')})
 		})
 		.catch(error=>{
-			res.status(422).send("User hasn't selected a destination for " + source_name)
+			res.status(500).send('Internal Server Error')
+		})
+}
+
+function checkSegmentConnection (req, res, next) {
+  const company = req.params.company
+  const source = 'woocom'
+	Destinations.findOne({company, source})
+		.then(response=>{
+			if(!(response && response.destination)){
+		        res.status(500).json({
+		        	error:`User hasn't selected a destination for ${source_name}`,
+		        	reason:'ValidationError'
+		        })
+			}
+			req.destination = response.destination
+      		req.company = company
+		})
+		.catch(error=>{
+			res.status(500).send('Internal Server Error')
 		})
 }
 
@@ -32,7 +51,9 @@ function checkConnectionRequest (req, res, next) {
 		req.destination = 'autopilot'
 	} else if ('aws' in req.body){
 		req.destination = 'aws'
-	} 
+	} else if ('segment' in req.body){
+		req.destination = 'segment'
+	}
 	next()
 	}
 
@@ -48,7 +69,7 @@ function corsMiddle(req, res, next) {
 }
 
 //when exporting a function, in what instances do you need to wrap it with brackets
-module.exports = {corsMiddle, checkConnectionRequest, checkPodioConnection};
+module.exports = {corsMiddle, checkConnectionRequest, checkPodioConnection, checkSegmentConnection};
 
 
 

@@ -3,6 +3,7 @@ const segmentRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const Analytics = require('analytics-node');
+const {checkSegmentConnection} = require('../middleware')
 // const analytics = new Analytics(write_key);
 
 
@@ -21,7 +22,7 @@ segmentRouter.post('/:company/identify', jsonParser,(req,res)=>{
 	}
 });
 
-segmentRouter.post('/:company/order-completed', jsonParser, (req,res)=>{
+segmentRouter.post('/:company/order-completed', [jsonParser, checkSegmentConnection], (req,res)=>{
 	const order = req.body;
 	const productsList = [];
 	if(('coupon_lines' in order)&&(order.coupon_lines.length>0)){
@@ -61,6 +62,7 @@ segmentRouter.post('/:company/order-completed', jsonParser, (req,res)=>{
 			}
 		}
 		//send to aws or segment
+		console.log(orderPayload)
 		res.status(201).end();
 	}
 	res.status(400).end();

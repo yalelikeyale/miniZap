@@ -69,10 +69,10 @@ connectionsRouter.post('/podio', [jwtAuth, checkConnectionRequest], (req,res)=>{
 })
 
 connectionsRouter.post('/segment', [jwtAuth, checkConnectionRequest], (req,res)=>{
-	const {segment_write} = req.body
 	const company = req.user
+	const source = 'woocomm'
 
-	Segment.find({company, segment_write})
+	Destinations.find({company, source})
 			.count()
 			.then(count=>{
 				if(count>0){
@@ -82,27 +82,13 @@ connectionsRouter.post('/segment', [jwtAuth, checkConnectionRequest], (req,res)=
 		            message: 'Duplicate Source Request. Please delete current configuration if you wish to continue'
 		          });				
 				}
-				return Segment.create({
-					segment_write,
-					company
-				})
-				.then(newSegment=>{
-					return newSegment
-				})
-				.catch(err=>{
-					res.status(500).send('Internal Server Error');
-				})
-			})
-			.then(newSegment=>{
-				if(newSegment){
-					const newDestObj = Object.assign({company:company}, req.body[req.destination])
-					destLookUp[req.destination](newDestObj)
-				}
+				const newDestObj = Object.assign({company}, req.body[req.destination])
+				destLookUp[req.destination](newDestObj)
 			})
 			.then(newDest=>{
 				Destinations.create({
-					company:company,
-					source:'segment',
+					company,
+					source,
 					destination:req.destination
 				})
 				.then(newDestConnection=>{

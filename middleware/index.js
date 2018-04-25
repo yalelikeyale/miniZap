@@ -1,4 +1,4 @@
 'use strict';
-const { checkConnectionRequest, checkPodioConnection, corsMiddle } = require('./middlewareFunctions');
+const { checkConnectionRequest,checkPodioConnection,checkSegmentConnection,corsMiddle } = require('./middlewareFunctions');
 
-module.exports = { checkConnectionRequest, corsMiddle, checkPodioConnection };
+module.exports = { checkConnectionRequest,corsMiddle,checkPodioConnection,checkSegmentConnection };
