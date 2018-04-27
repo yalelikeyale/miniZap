@@ -4,31 +4,30 @@ const AWSConstructor = function Constructor(user_settings) {
 	this.access_key = user_settings.access_key;
 	this.secret_key = user_settings.secret_key;
   this.region = user_settings.region;
+  this.endpoint = user_settings.endpoint;
 };
-
-// const AutoPilot = new AutoPilotConstructor()
 
 AWSConstructor.prototype.start = ()=>{
   AWS.config = new AWS.Config();
   AWS.config.accessKeyId = AWSConstructor.access_key;
   AWS.config.secretAccessKey = AWSConstructor.secret_key;
   AWS.config.region = AWSConstructor.region;
-  s3 = new AWS.S3();
+  AWS.config.endpoint = AWSConstructor.endpoint;
 }
 
-AWSConstructor.prototype.uploadOrder = (order, company, bucket)=>{
-  const order_id = order.properties.order_id
+AWSConstructor.prototype.uploadOrder = (order, table)=>{
   const params = {
-      Body: JSON.stringify(order),
-      Bucket: bucket,
-      Key: `${company}_${order_id}.json`,
+      TableName:table,
+      Item:order
   };
-  s3.upload(params, (err, data) => {
-      if(err)
-          console.log(err);
-      else
-          console.log("success");
-  });
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  docClient.put(params, function(err, data) {
+      if (err) {
+          console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+      } else {
+          console.log("Added item:", JSON.stringify(data, null, 2));
+      }
+  })
 }
 
 module.exports = {AWSConstructor}

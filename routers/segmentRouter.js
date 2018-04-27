@@ -14,7 +14,6 @@ segmentRouter.post('/:company/identify', jsonParser,(req,res)=>{
 	const userObj = req.body;
 	const userId = userObj.user_id
 	delete userObj.user_id
-	console.log(userObj)
 	if(userObj){
 		// analytics.identify({userId:userId, traits:userObj});
 		// send to aws or segment
@@ -67,10 +66,8 @@ segmentRouter.post('/:company/order-completed', [jsonParser, checkSegmentConnect
 			}
 		}
 		//send to aws or segment
-		trafficControl[destination].orderCreated(company, orderPayload)
-		res.status(201).end();
+		trafficControl[destination].create(company, orderPayload)
 	}
-	res.status(400).end();
 });
 
 segmentRouter.post('/:company/order-updated', jsonParser, (req,res)=>{

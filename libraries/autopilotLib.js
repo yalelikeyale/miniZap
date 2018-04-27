@@ -5,8 +5,6 @@ const AutoPilotConstructor = function Constructor(user_settings) {
 	this.api_key = user_settings.api_key
 };
 
-// const AutoPilot = new AutoPilotConstructor()
-
 AutoPilotConstructor.prototype.start = ()=>{
 	const autopilot = new Autopilot(AutoPilotConstructor.api_key)
 }

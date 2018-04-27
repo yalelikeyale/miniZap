@@ -1,4 +1,4 @@
 'use strict';
 const {AutoPilotConstructor} = require('./autopilotLib')
-const {AWSConstructor} = require('./awsLib.js')
-module.exports = {AutoPilotConstructor,AWSConstructor};
+const {dynamoFactory} = require('./awsFactory.js')
+module.exports = {AutoPilotConstructor,dynamoFactory};
