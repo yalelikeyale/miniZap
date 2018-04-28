@@ -11,6 +11,7 @@ const jsonParser = bodyParser.json();
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 userRouter.use(jsonParser);
+
 // Post to register a new user
 userRouter.post('/', (req, res) => {
   const requiredFields = ['company_name', 'password'];

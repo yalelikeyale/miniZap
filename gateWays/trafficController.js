@@ -1,6 +1,6 @@
 
-const {AutoPilotConstructor, dynamoFactory} = require('../libraries')
-const {Pilot, AWS} = require('../models')
+const {AutoPilotConstructor, dynamoFactory, segmentFactory} = require('../libraries')
+const {Pilot, AWS, Segment} = require('../models')
 
 const trafficControl = {
 	autopilot:{
@@ -22,7 +22,7 @@ const trafficControl = {
 			AWS.findOne({company})
 			  .then(destination=>{
 			  	if(destination){
-				  	const order_id = order.properties.order_id
+				  	const order_id = order.properties.order_id.toString()
 				  	const products = order.properties.products
 				  	const userId = order.userId
 				  	const event = order.event
@@ -33,12 +33,26 @@ const trafficControl = {
 				  	const awsControl = dynamoFactory()
 				  	awsControl.initialize({"access_key":access_key, "secret_key":secret_key, "region":region, "endpoint":endpoint})
 				  	awsControl.setConfig()
-				  	awsControl.sendIt(order, 'orders')
+				  	awsControl.sendIt(order_details, 'orders')
 			    }
 			  })
 			  .catch(err=>{console.log(err); res.status(500).send('Internal Server Error')})
 		}
+	},
+	segment:{
+		create:(query, order) => {
+			const company = query
+			Segment.findOne({company})
+				.then(destination => {
+					if(destination){
+						const {segment_write} = destination
+						const segmentControl = segmentFactory()
+					  	segmentControl.initialize({"segment_write":segment_write})
+					  	segmentControl.sendIt(order)
+					}
+				})
+			}
+		}
 	}
-}
 
 module.exports = {trafficControl}
