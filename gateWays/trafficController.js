@@ -1,4 +1,4 @@
-
+const dateTime = require('node-datetime');
 const {AutoPilotConstructor, dynamoFactory, segmentFactory} = require('../libraries')
 const {Pilot, AWS, Segment} = require('../models')
 
@@ -22,18 +22,20 @@ const trafficControl = {
 			AWS.findOne({company})
 			  .then(destination=>{
 			  	if(destination){
-				  	const order_id = order.properties.order_id.toString()
+			  		const dt = dateTime.create();
+					const timeNow = dt.format('Y-m-d H:M:S');
+				  	const order_id = order.properties.order_id
 				  	const products = order.properties.products
 				  	const userId = order.userId
 				  	const event = order.event
 				  	delete order.properties.products
 				  	let order_details = order.properties
-				  	order_details = Object.assign({user_id:userId, event:event}, order_details)
+				  	order_details = Object.assign({user_id:userId, event:event, timestamp:timeNow}, order_details)
 			  		const {access_key, secret_key, region, endpoint} = destination
 				  	const awsControl = dynamoFactory()
 				  	awsControl.initialize({"access_key":access_key, "secret_key":secret_key, "region":region, "endpoint":endpoint})
-				  	awsControl.setConfig()
-				  	awsControl.sendIt(order_details, 'orders')
+				  	awsControl.sendOrder(order_details, 'orders')
+				  	awsControl.sendItems(products, 'order_items')
 			    }
 			  })
 			  .catch(err=>{console.log(err); res.status(500).send('Internal Server Error')})
