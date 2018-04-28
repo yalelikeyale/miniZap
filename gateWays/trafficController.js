@@ -34,8 +34,8 @@ const trafficControl = {
 			  		const {access_key, secret_key, region, endpoint} = destination
 				  	const awsControl = dynamoFactory()
 				  	awsControl.initialize({"access_key":access_key, "secret_key":secret_key, "region":region, "endpoint":endpoint})
-				  	awsControl.sendOrder(order_details, 'orders')
-				  	awsControl.sendItems(products, 'order_items')
+				  	awsControl.sendOrder(order_details)
+				  	awsControl.sendItems(products)
 			    }
 			  })
 			  .catch(err=>{console.log(err); res.status(500).send('Internal Server Error')})

@@ -22,14 +22,14 @@ const dynamoFactory = () => ({
 		this.endpoint = endpoint;
 		return this
 	},
-	sendOrder(order, table){
+	sendOrder(order){
 		AWS.config = new AWS.Config();
 	    AWS.config.accessKeyId = this.access_key;
 	    AWS.config.secretAccessKey = this.secret_key;
 	    AWS.config.region = this.region;
 	    AWS.config.endpoint = this.endpoint;
 	    const params = {
-	        TableName:table,
+	        TableName:'orders',
 	        Item:order,
 	        ReturnValues: 'ALL_OLD'
 	    };
@@ -43,7 +43,7 @@ const dynamoFactory = () => ({
 	        }
 	    })
 	},
-	sendItems(products, table){
+	sendItems(products){
 		AWS.config = new AWS.Config();
 	    AWS.config.accessKeyId = this.access_key;
 	    AWS.config.secretAccessKey = this.secret_key;
@@ -52,7 +52,7 @@ const dynamoFactory = () => ({
 	    const orderItems = products.map(genOrderItem)
 	    const params = {
 	    	RequestItems:{
-	    		table:orderItems
+	    		'order_items':orderItems
 	    	}
 	    }
 	    const docClient = new AWS.DynamoDB.DocumentClient();
@@ -60,7 +60,7 @@ const dynamoFactory = () => ({
 	        if (err) {
 	            console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
 	        } else {
-	            console.log('Added ' + itemsArray.length + ' items to DynamoDB');
+	            console.log('Added ' + orderItems.length + ' items to DynamoDB');
 	        }
 	    })
 	}
