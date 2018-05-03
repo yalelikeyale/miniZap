@@ -12,7 +12,6 @@ gulp.task('serve',
   function () {
     gulp.watch('public/**/*.js').on('change', reload);
     gulp.watch('public/style.css').on('change', reload);
-    gulp.watch('**/*.html', ['ngtemplate']);
   }
 );
 
