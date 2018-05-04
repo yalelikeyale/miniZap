@@ -10,7 +10,7 @@ const {corsMiddle} = require('./middleware')
 mongoose.Promise = global.Promise;
 
 const {localStrategy, jwtStrategy } = require('./authentication');
-const {signinRouter, userRouter, podioRouter, connectionsRouter, segmentRouter} = require('./routers');
+const {signinRouter, userRouter, clientRouter, connectionsRouter, woocomRouter} = require('./routers');
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
@@ -25,11 +25,11 @@ app.get('/', (req, res) => {
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-app.use('/login',           signinRouter);
-app.use('/users',             userRouter);
-app.use('/podio',            podioRouter);
-app.use('/segment',        segmentRouter);
-app.use('/connect',    connectionsRouter);
+app.use('/login',        signinRouter);
+app.use('/users',          userRouter);
+app.use('/clients',      clientRouter);
+app.use('/woocom',      woocomRouter);
+app.use('/connect', connectionsRouter);
 
 let server;
 

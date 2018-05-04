@@ -49,7 +49,7 @@ const trafficControl = {
 					if(destination){
 						const {segment_write} = destination
 						const segmentControl = segmentFactory()
-					  	segmentControl.initialize({"segment_write":segment_write})
+					  	segmentControl.initialize({segment_write})
 					  	segmentControl.sendIt(order)
 					}
 				})

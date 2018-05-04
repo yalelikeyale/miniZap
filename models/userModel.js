@@ -4,14 +4,17 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const usersSchema = new mongoose.Schema({
-  company_name:  {type: String, required: true},
+  username:  {type: String, required: true},
   password:  {type: String, required: true},
+  first_name:  {type: String, required: true},
+  last_name:  {type: String, required: true},
   token:{type:String, default:''}
 });
 
 usersSchema.methods.serialize = function() {
   return {
-    company_name: this.company_name
+    username: this.username,
+    first_name:this.first_name
   };
 }
 

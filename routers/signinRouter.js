@@ -24,8 +24,8 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // The user provides a company_name and password to login
 signinRouter.post('/', localAuth, (req, res) => {
+  console.log('made it into sign in request')
   const authToken = createAuthToken(req.user._id);
-  const company_name = req.user.company_name
   const updated = {"token":authToken}
   res.status(201).json(updated)
 })

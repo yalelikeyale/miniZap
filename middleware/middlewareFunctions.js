@@ -1,31 +1,6 @@
-const {Destinations, Podio} = require('../models')
+const {Destinations, Clients} = require('../models')
 
-function checkPodioConnection (req, res, next) {
-    const company = req.params.company
-    const source = 'podio'
-	Destinations.findOne({company, source})
-		.then(response=>{
-			if(!(response && response.destination)){
-		        res.status(500).json({
-		        	error:`User hasn't selected a destination for ${source_name}`,
-		        	reason:'ValidationError'
-		        })
-			}
-			req.destination = response.destination
-      		req.company = company
-      		Podio.findOne({company})
-      			.then(podioCreds=>{
-      				req.podioCreds = podioCreds
-      				next()
-      			})
-      			.catch(error=>{console.log('podio creds search failed')})
-		})
-		.catch(error=>{
-			res.status(500).send('Internal Server Error')
-		})
-	}
-
-function checkSegmentConnection (req, res, next) {
+function checkWooConnection (req, res, next) {
     const company = req.params.company
     const source = 'woocomm'
 	Destinations.findOne({company, source})
@@ -44,6 +19,25 @@ function checkSegmentConnection (req, res, next) {
 			res.status(500).send('Internal Server Error')
 		})
 	}
+
+function checkClients (req, res, next) {
+	const {company} = req.body
+	console.log(company)
+	Clients.findOne({_id:company})
+		.then(response=>{
+			console.log(response)
+			if(!(response)){
+		        res.status(500).json({
+		        	error:`Client does not exist`,
+		        	reason:'ValidationError'
+		        })
+			}
+			next()
+		})
+		.catch(error=>{
+			res.status(500).send('Internal Server Error')
+		})
+}
 
 //the connections router takes an object with the credentials of the source + the destination
 //this middleware checks that request to determine where to send the data
@@ -70,7 +64,7 @@ function corsMiddle(req, res, next) {
 }
 
 //when exporting a function, in what instances do you need to wrap it with brackets
-module.exports = {corsMiddle, checkConnectionRequest, checkPodioConnection, checkSegmentConnection};
+module.exports = {corsMiddle, checkConnectionRequest, checkClients, checkWooConnection};
 
 
 

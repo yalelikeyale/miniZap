@@ -1,11 +1,8 @@
 const express = require('express');
-const segmentRouter = express.Router();
+const woocomRouter = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-//need to move this over to traffic control
-// const Analytics = require('analytics-node');
-// const analytics = new Analytics(write_key);
-const {checkSegmentConnection} = require('../middleware')
+const {checkWooConnection} = require('../middleware')
 const {trafficControl} = require('../gateWays')
 
 
@@ -52,7 +49,7 @@ const genOrderObject = (order)=>{
 }
 
 
-segmentRouter.post('/:company/identify', jsonParser,(req,res)=>{
+woocomRouter.post('/:company/identify', jsonParser,(req,res)=>{
 	const userObj = req.body;
 	const userId = userObj.user_id
 	delete userObj.user_id
@@ -66,7 +63,7 @@ segmentRouter.post('/:company/identify', jsonParser,(req,res)=>{
 	}
 });
 
-segmentRouter.post('/:company/order-completed', [jsonParser, checkSegmentConnection], (req,res)=>{
+woocomRouter.post('/:company/order-completed', [jsonParser, checkWooConnection], (req,res)=>{
 	const destination = req.destination
 	const company = req.company
 	const order = req.body;
@@ -75,7 +72,7 @@ segmentRouter.post('/:company/order-completed', [jsonParser, checkSegmentConnect
 	res.status(201).end()
 });
 
-segmentRouter.post('/:company/order-updated', jsonParser, (req,res)=>{
+woocomRouter.post('/:company/order-updated', jsonParser, (req,res)=>{
 	const destination = req.destination
 	const company = req.company
 	const order = req.body;
@@ -84,6 +81,6 @@ segmentRouter.post('/:company/order-updated', jsonParser, (req,res)=>{
 	res.status(201)
 })
 
-module.exports = {segmentRouter};
+module.exports = {woocomRouter};
 
 

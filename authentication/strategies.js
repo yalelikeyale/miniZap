@@ -6,8 +6,9 @@ const { Users } = require('../models/userModel');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const localStrategy = new LocalStrategy((username, password, callback) => {
+  console.log(username, password)
   let user;
-  Users.findOne({ company_name: username })
+  Users.findOne({ username })
     .then(_user => {
       user = _user;
       if (!user) {

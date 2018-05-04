@@ -1,18 +1,25 @@
 function storeToken(data){
-	console.log('success ' + JSON.stringify(data))
+	localStorage.setItem('access_key',data.token)
+	//redirect
+	// window.location('/dashboard')
 }
 
-$('#submit').on('click', function(e){
+$('#signin-form').on('submit', function(e){
+	e.preventDefault()
 	const username = $('#username').val()
 	const password = $('#password').val()
 	const creds = {
-		username:username,
-		password:password
+		username,
+		password
 	}
+	console.log(creds)
 	const payload = {
-		url:'localhost:8080/login',
+		url:'http://localhost:8080/login',
+		headers:{
+			'Content-Type':'application/json'
+		},
 		dataType:'json',
-		data:creds,
+		data:JSON.stringify(creds),
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
 		},

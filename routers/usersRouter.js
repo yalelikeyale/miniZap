@@ -14,7 +14,7 @@ userRouter.use(jsonParser);
 
 // Post to register a new user
 userRouter.post('/', (req, res) => {
-  const requiredFields = ['company_name', 'password'];
+  const requiredFields = ['username', 'password', 'first_name', 'last_name'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -25,7 +25,7 @@ userRouter.post('/', (req, res) => {
     });
   }
 
-  const explicityTrimmedFields = ['company_name', 'password'];
+  const explicityTrimmedFields = ['username', 'password'];
   const nonTrimmedField = explicityTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
   );
@@ -39,7 +39,7 @@ userRouter.post('/', (req, res) => {
   }
 
   const sizedFields = {
-    company_name: {
+    username: {
       min: 6
     },
     password: {
@@ -70,12 +70,9 @@ userRouter.post('/', (req, res) => {
     });
   }
 
-  let {company_name, password, first_name = '', last_name = ''} = req.body;
-  first_name = first_name.trim();
-  last_name = last_name.trim();
+  let {username, password, first_name, last_name} = req.body;
 
-
-  return Users.find({company_name})
+  return Users.find({username})
     .count()
     .then(count => {
       if (count > 0) {
@@ -90,8 +87,10 @@ userRouter.post('/', (req, res) => {
     })
     .then((hash) => {
       return Users.create({
-        company_name,
-        password: hash
+        username,
+        password: hash,
+        first_name,
+        last_name
       });
     })
     .then(user => {
@@ -106,12 +105,12 @@ userRouter.post('/', (req, res) => {
 })
 
 //put to update a user ie. change password/ permissions
-userRouter.put('/:company_name',(req,res)=>{
-  let company_name = req.params.company_name;
-  if(!(company_name && company_name.length > 6)){
-    res.status(400).send('Please Enter a Valid company_name');
+userRouter.put('/:username',(req,res)=>{
+  let username = req.params.username;
+  if(!(username && username.length > 6)){
+    res.status(400).send('Please Enter a Valid username');
   }
-  const stringFields = ['company_name', 'password', 'first_name', 'last_name'];
+  const stringFields = ['username', 'password', 'first_name', 'last_name'];
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   );
@@ -123,7 +122,7 @@ userRouter.put('/:company_name',(req,res)=>{
       location: nonStringField
     });
   }
-  const updateableFields = ['company_name', 'password'];
+  const updateableFields = ['username', 'password'];
   const nonUpdateableField = updateableFields.find(
     field => {field in req.body}
   );
@@ -141,47 +140,47 @@ userRouter.put('/:company_name',(req,res)=>{
       updated[field] = req.body[field];
     }
   });
-  return Users.find({company_name})
+  return Users.find({username})
       .count()
       .then(count => {
         if(!(count===1)){
           return Promise.reject({
             code: 422,
             reason: 'ValidationError',
-            message: 'company_name not Found',
-            location: 'company_name'
+            message: 'username not Found',
+            location: 'username'
           });
         }
         return null
       })
       .then(()=>{
-        Users.findOneAndUpdate({company_name},{ $set: updated }, { new: true })
+        Users.findOneAndUpdate({username},{ $set: updated }, { new: true })
         .then(updatedUser => {res.status(201).json(updatedUser.serialize())})
         .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
       })
       .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
 });
 
-userRouter.delete('/:company_name',  (req,res)=>{
-  let company_name = req.params.company_name 
-  if(!(company_name && company_name.length>6)){
-    res.status(400).send('Please Enter a Valid company_name');
+userRouter.delete('/:username',  (req,res)=>{
+  let username = req.params.username 
+  if(!(username && username.length>6)){
+    res.status(400).send('Please Enter a Valid username');
   }
-  Users.find({company_name})
+  Users.find({username})
       .count()
       .then(count => {
         if(!(count===1)){
           return Promise.reject({
             code: 422,
             reason: 'ValidationError',
-            message: 'company_name not Found',
-            location: 'company_name'
+            message: 'username not Found',
+            location: 'username'
           });
         }
         return null
       })
       .then(()=>{
-        Users.find({company_name})
+        Users.find({username})
           .remove()
           .then(()=>{
             res.status(201).send('User Deleted');
@@ -194,12 +193,6 @@ userRouter.get('/',(req, res) => {
     .then(users => res.json(users.map(user => user.serialize())))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
-
-// userRouter.delete('/',(req, res) => {
-//   return Users.remove({})
-//     .then(response => res.send(response))
-//     .catch(err => res.status(500).json({message: 'Internal server error'}));
-// });
 
 
 module.exports = {userRouter};
