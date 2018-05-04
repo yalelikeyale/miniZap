@@ -8,7 +8,6 @@ const {Users} = require('../models')
 const signinRouter = express.Router();
 
 const createAuthToken = function(user) {
-  console.log(user)
   return jwt.sign({user}, process.env.JWT_SECRET, {
     subject: user.toString(),
     algorithm: 'HS256'

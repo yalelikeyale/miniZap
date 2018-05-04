@@ -1,13 +1,13 @@
 function storeToken(data){
 	localStorage.setItem('access_key',data.token)
 	//redirect
-	// window.location('/dashboard')
+	window.location = '../dashboard/index.html'
 }
 
-$('#signin-form').on('submit', function(e){
+$('#submit').on('click', function(e){
 	e.preventDefault()
-	const username = $('#username').val()
-	const password = $('#password').val()
+	const username = $('.js-username').val()
+	const password = $('.js-password').val()
 	const creds = {
 		username,
 		password

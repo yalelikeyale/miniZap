@@ -3,29 +3,52 @@
     <head>
         <title>Bootstrap 4 Layout</title>
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,800">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- Bootstrap core CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/styles.css">
     </head>
 
-    <body>
+    <body class="bg-color">
         <div class="container">
-            <form id="signin-form">
-              <div class="form-group">
-                <label for="exampleInputEmail1">User Name</label>
-                <input type="text" class="form-control" id="username" aria-describedby="username" placeholder="Prince123">
+          <div class="row">
+             <div class="col-md-6 mb-4 center">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="text-center default-text py-3"><i class="fa fa-lock"></i> Login:</h3>
+                            <!--Body-->
+                            <div class="md-form">
+                                <i class="fa fa-envelope prefix grey-text"></i>
+                                <input type="text" id="defaultForm-email" class="form-control js-username">
+                                <label for="defaultForm-email">Your email</label>
+                            </div>
+                            <div class="md-form">
+                                <i class="fa fa-lock prefix grey-text"></i>
+                                <input type="password" id="defaultForm-pass" class="form-control js-password">
+                                <label for="defaultForm-pass">Your password</label>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-default waves-effect waves-light bg-color" id="submit">Log In</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password">
-              </div>
-              <button type="submit" id="submit" class="btn btn-primary">Submit</button>
-            </form>
+          </div>
         </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
     <script src="js/signIn.js"></script>
     </body>
 </html>
