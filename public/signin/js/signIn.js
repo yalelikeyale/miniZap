@@ -1,7 +1,13 @@
+const access_key = localStorage.getItem('access_key')
+
+if(access_key){
+	window.location = '../portal/index.html'
+}
+
 function storeToken(data){
 	localStorage.setItem('access_key',data.token)
 	//redirect
-	window.location = '../dashboard/index.html'
+	window.location = '../portal/index.html'
 }
 
 $('#submit').on('click', function(e){

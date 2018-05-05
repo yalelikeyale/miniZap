@@ -47,13 +47,14 @@ clientRouter.post('/', jwtAuth, (req, res) => {
         const error = {
           code: 422,
           reason: 'ValidationError',
-          message: 'User Already Exists'
+          message: 'Company Already Exists'
         }
         Promise.reject(error);
       }
       return null
     })
     .then(() => {
+      console.log(company)
       return Clients.create({ company });
     })
     .then(company => {
@@ -95,8 +96,9 @@ clientRouter.delete('/:company', jwtAuth, (req,res)=>{
 });
 
 clientRouter.get('/', jwtAuth, (req, res) => {
+  console.log('get all clients function is being called')
   return Clients.find()
-    .then(companys => res.json(companys.map(company => company.serialize())))
+    .then(companies => res.json(companies))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
