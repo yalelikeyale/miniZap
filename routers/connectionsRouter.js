@@ -15,7 +15,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 //a failure in any of the checks and balances isn't stopping data from being uploaded. need to add reject promises to stop the chain
 
-connectionsRouter.post('/woocomm', [jwtAuth, checkClients, checkConnectionRequest], (req,res)=>{
+connectionsRouter.post('/woocom', [jwtAuth, checkClients, checkConnectionRequest], (req,res)=>{
 	const source = 'woocomm'
     const {company} = req.body
 	Destinations.find({company, source})
@@ -51,3 +51,9 @@ connectionsRouter.post('/woocomm', [jwtAuth, checkClients, checkConnectionReques
 })
 
 module.exports = {connectionsRouter};
+
+
+
+
+
+
