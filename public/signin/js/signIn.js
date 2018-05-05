@@ -1,7 +1,7 @@
 const access_key = localStorage.getItem('access_key')
 
-if(access_key){
-	window.location = '../portal/index.html'
+if(!(access_key)){
+	window.location = '../index.html'
 }
 
 function storeToken(data){

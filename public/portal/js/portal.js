@@ -25,6 +25,7 @@ if((access_key)){
 $('.dropdown-menu').on('click', '.dropdown-item',function(e){
 	let comp_id = $(this).data('company')
 	let comp_name = $(this).text()
-	localStorage.setItem(comp_name, comp_id)
-	window.location = `../profiles/${comp_id}/client`
+	localStorage.setItem("comp_id", comp_id)
+	localStorage.setItem("comp_name", comp_name)
+	window.location = `../profiles/${comp_id}/account`
 })
