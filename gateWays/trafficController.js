@@ -3,19 +3,6 @@ const {AutoPilotConstructor, dynamoFactory, segmentFactory} = require('../librar
 const {Pilot, AWS, Segment} = require('../models')
 
 const trafficControl = {
-	autopilot:{
-		create:(query, user)=>{
-		Pilot.findOne(query)
-		  .then(destination=>{
-		  	const autopilot = new AutoPilotConstructor({
-		  							"api_key":destination.pilot_key,
-		  							"trigger":destination.trigger
-		  						})
-		  	autopilot.start()
-		  	autopilot.addContactToJourney(user)
-		  })
-		}
-	},
 	aws:{
 		create:(query, order)=>{
 			const company = query

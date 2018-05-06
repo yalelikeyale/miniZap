@@ -1,4 +1,4 @@
-const client_id = localStorage.getItem('comp_id')
+const client_id = localStorage.getItem('client_id')
 const user = localStorage.getItem('access_key')
 
 if(!(client_id)){
