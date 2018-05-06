@@ -22,10 +22,8 @@ function checkWooConnection (req, res, next) {
 
 function checkClients (req, res, next) {
 	const {company} = req.body
-	console.log(company)
 	Clients.findOne({_id:company})
 		.then(response=>{
-			console.log(response)
 			if(!(response)){
 		        res.status(500).json({
 		        	error:`Client does not exist`,

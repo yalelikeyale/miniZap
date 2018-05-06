@@ -29,9 +29,9 @@ connectionsRouter.post('/woocom', [jwtAuth, checkClients, checkConnectionRequest
 		          });				
 				}
 				const newDestObj = Object.assign({company}, req.body[req.destination])
-				destLookUp[req.destination](newDestObj)
+				return destLookUp[req.destination](newDestObj)
 			})
-			.then(newDest=>{
+			.then(()=>{
 				Destinations.create({
 					company,
 					source,
@@ -43,6 +43,7 @@ connectionsRouter.post('/woocom', [jwtAuth, checkClients, checkConnectionRequest
 				.catch(err=>{console.log(err)})
 			})
 		    .catch(err => {
+		      console.log('In connections router catch statement')
 		      if (err.reason === 'ValidationError') {
 		        return res.status(err.code).json(err);
 		      }
