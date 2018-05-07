@@ -29,56 +29,52 @@
                     </ul>
                 </div>
             </nav>
-            <div class="row">
-              <div class="col-sm">
-                <div class="card">
-                  <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Segment Credentials
-                    </button>
-                   <div class="dropdown-menu">
-                        <form class="px-4 py-3" id="seg-form">
-                          <div class="form-group">
-                            <label for="segment_write">Segment Write Key</label>
-                            <input type="text" class="form-control" id="segment_write" placeholder="segment_write">
-                          </div>
-                          <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-               <div class="col-sm"></div>
-               <div class="col-sm">
+            <div class="jumbotron">
+              <h1 class="display-4">Create New Connection</h1>
+              <p class="lead">Select a source from the sources dropdown and then select a destination for where to send the data coming from that source</p>
+              <hr class="my-4">
+              <div class="row">
+                <div class="col-6">
                   <div class="card">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          AWS Credentials
-                        </button>
-                        <div class="dropdown-menu">
-                          <form class="px-4 py-3" id="aws-form">
-                            <div class="form-group">
-                              <label for="access_key">Access Key</label>
-                              <input type="text" class="form-control" id="access_key" placeholder="access_key">
-                            </div>
-                            <div class="form-group">
-                              <label for="secret_key">Secret Key</label>
-                              <input type="text" class="form-control" id="secret_key" placeholder="secret_key">
-                            </div>
-                            <div class="form-group">
-                              <label for="region">Region</label>
-                              <input type="text" class="form-control" id="region" placeholder="region">
-                            </div>
-                            <div class="form-group">
-                              <label for="endpoint">Endpoint</label>
-                              <input type="text" class="form-control" id="endpoint" placeholder="endpoint">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                          </form>
-                        </div>
-                     </div>
+                    <div class="card-body">
+                        <div class="button-wrap">
+                          <button class="btn btn-secondary btn-lg dropdown-toggle btn-block btn-success" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sources
+                          </button>
+                          <div class="dropdown-menu">
+                            <button class="dropdown-item" type="button">WooCommerce</button>
+                            <button class="dropdown-item" type="button">Shopify</button>
+                          </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div class="col-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="dropdown">
+                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                          </button>
+                          <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                              <li class="dropdown-submenu">
+                                <a  class="dropdown-item" tabindex="-1" href="#">Segment</a>
+                                <ul class="dropdown-menu">
+                                  <form class="px-4 py-3">
+                                    <div class="form-group">
+                                      <label for="segment_write">Segment Write Key</label>
+                                      <input type="text" class="form-control" id="segment_write" placeholder="segment_write">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                  </form>
+                                </ul>
+                              </li>
+                            </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
