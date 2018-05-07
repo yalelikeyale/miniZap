@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const usersSchema = new mongoose.Schema({
   username:  {type: String, required: true},
   password:  {type: String, required: true},
-  token:{type:String, default:''}
+  first_name: {type: String, required: true}
 });
 
 usersSchema.methods.serialize = function() {

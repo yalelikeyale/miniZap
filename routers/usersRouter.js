@@ -14,7 +14,7 @@ userRouter.use(jsonParser);
 
 // Post to register a new user
 userRouter.post('/', (req, res) => {
-  const requiredFields = ['username', 'password'];
+  const requiredFields = ['username', 'password', 'first_name'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -25,7 +25,7 @@ userRouter.post('/', (req, res) => {
     });
   }
 
-  const explicityTrimmedFields = ['username', 'password'];
+  const explicityTrimmedFields = ['username', 'password','first_name'];
   const nonTrimmedField = explicityTrimmedFields.find(
     field => req.body[field].trim() !== req.body[field]
   );
@@ -70,7 +70,7 @@ userRouter.post('/', (req, res) => {
     });
   }
 
-  let {username, password} = req.body;
+  let {username, password, first_name} = req.body;
 
   return Users.find({username})
     .count()
@@ -87,6 +87,7 @@ userRouter.post('/', (req, res) => {
     })
     .then((hash) => {
       return Users.create({
+        first_name,
         username,
         password: hash
       });
@@ -120,7 +121,7 @@ userRouter.put('/:username',(req,res)=>{
       location: nonStringField
     });
   }
-  const updateableFields = ['username', 'password'];
+  const updateableFields = ['username', 'password','first_name'];
   const nonUpdateableField = updateableFields.find(
     field => {field in req.body}
   );
