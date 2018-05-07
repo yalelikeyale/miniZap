@@ -1,5 +1,9 @@
 const access_key = localStorage.getItem('access_key')
 
+function refreshPage(data){
+	location.reload()
+}
+
 function loadClients(data){
 	console.log(data)
 	let newRow = false;
@@ -63,6 +67,27 @@ $('.container').on('click','.add-connect', function(e){
 	let client_id = $(this).data('id')
 	localStorage.setItem('client_id',client_id)
 	window.location = `../profiles/${client_id}/account`
+})
+
+$('.add-client').on('submit',function(e){
+	console.log('in add new client event listener function')
+	e.preventDefault()
+	const company = $(this).find('#new-company').val()
+	console.log(company)
+    const payload = {
+		url:'http://localhost:8080/clients',
+		headers:{
+			'Authorization':`Bearer ${access_key}`
+		},
+		data:{company},
+		dataType:'json',
+		error:function(error){
+			console.log('error ' + JSON.stringify(error));
+		},
+		success:refreshPage
+	}
+	console.log(payload.data)
+	$.post(payload)
 })
 
 

@@ -11,11 +11,33 @@
     <body>
         <div class="container">
             <nav class="navbar navbar-expand-lg bg-purple">
-                <a class="navbar-brand txt-white" href="#"><img class="logo" src="../images/logo.png"></a>
+                <a class="navbar-brand txt-white" href="../index.html"><img class="logo" src="../images/logo.png"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon">Docs</span>
                 </button>
             </nav>
+            <div class="jumbotron">
+              <h1 class="display-4">Client Portal</h1>
+              <p class="lead">Click into each clients' customer profile below</p>
+              <hr class="my-4">
+              <h5>Don't see the client you're looking for? Add a new client here</h5>
+              <p class="lead">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add Client
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <form class="px-4 py-3 add-client">
+                        <div class="form-group">
+                          <label for="new-company">Company Name</label>
+                          <input type="text" class="form-control" id="new-company" placeholder="Enter Company Name Here">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                      </form>
+                    </div>
+                </div>
+              </p>
+            </div>
             <div data-index="0" class="row">
                 
             </div>
