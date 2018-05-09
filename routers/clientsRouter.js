@@ -68,12 +68,12 @@ clientRouter.post('/', jwtAuth, (req, res) => {
     });
 })
 
-clientRouter.delete('/:company', jwtAuth, (req,res)=>{
-  let company = req.params.company 
-  if(!(company)){
+clientRouter.delete('/:id', jwtAuth, (req,res)=>{
+  let _id = req.params.id 
+  if(!(_id)){
     res.status(400).send('Please Enter a Valid companyname');
   }
-  Clients.find({company})
+  Clients.find({_id})
       .count()
       .then(count => {
         if(!(count===1)){
@@ -87,7 +87,7 @@ clientRouter.delete('/:company', jwtAuth, (req,res)=>{
         return null
       })
       .then(()=>{
-        Clients.find({company})
+        Clients.find({_id})
           .remove()
           .then(()=>{
             res.status(201).send('Company Deleted');
@@ -95,9 +95,43 @@ clientRouter.delete('/:company', jwtAuth, (req,res)=>{
       })
 });
 
+//put to update a user ie. change password/ permissions
+clientRouter.put('/:_id',(req,res)=>{
+  let _id = req.params._id;
+  const {company} = req.body
+  if(!(_id && _id.length > 6)){
+    res.status(400).send('Please Enter a Valid _id');
+  }
+  const updateableFields = ['company'];
+  const updated = {};
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field];
+    }
+  });
+  return Clients.find({_id})
+      .count()
+      .then(count => {
+        if(!(count===1)){
+          return Promise.reject({
+            code: 422,
+            reason: 'ValidationError',
+            message: '_id not Found',
+            location: '_id'
+          });
+        }
+        return null
+      })
+      .then(()=>{
+        Clients.findOneAndUpdate({_id},{ $set: updated }, { new: true })
+        .then(updatedClient => {console.log(updatedClient); res.status(201).json(updatedClient)})
+        .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
+      })
+      .catch(err => res.status(500).json({ message: 'Internal Server Error' }));
+});
+
 clientRouter.get('/', jwtAuth, (req, res) => {
-  console.log('get all clients function is being called')
-  return Clients.find()
+  Clients.find()
     .then(companies => res.json(companies))
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });

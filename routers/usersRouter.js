@@ -121,18 +121,7 @@ userRouter.put('/:username',(req,res)=>{
       location: nonStringField
     });
   }
-  const updateableFields = ['username', 'password','first_name'];
-  const nonUpdateableField = updateableFields.find(
-    field => {field in req.body}
-  );
-  if (nonUpdateableField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Cannot update entered field',
-      location: nonUpdateableField
-    });
-  }
+  const updateableFields = ['username', 'first_name'];
   const updated = {};
   updateableFields.forEach(field => {
     if (field in req.body) {

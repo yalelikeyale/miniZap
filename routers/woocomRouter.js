@@ -78,7 +78,7 @@ woocomRouter.post('/:company/order-updated', jsonParser, (req,res)=>{
 	const order = req.body;
 	const orderPayload = genOrderObject(order)
 	trafficControl[destination].update(company, orderPayload)
-	res.status(201)
+	res.status(201).end()
 })
 
 module.exports = {woocomRouter};

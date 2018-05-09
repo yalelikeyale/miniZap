@@ -10,8 +10,9 @@ const jsonParser = bodyParser.json();
 profileRouter.use( jsonParser );
 
 profileRouter.get('/:company/account', (req, res) => {
-  console.log('made it into profile router get request')
-  res.sendFile('/Users/WiseYale/Desktop/thinkful/capstones/node-capstone/miniZap/public/profiles/index.html');
+  console.log(__dirname)
+  // res.sendFile('/Users/WiseYale/Desktop/thinkful/capstones/node-capstone/miniZap/public/profiles/index.html');
+  res.sendFile('index.html', {"root": "./public/profiles"});
 });
 
 
