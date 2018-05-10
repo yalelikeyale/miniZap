@@ -1,36 +1,86 @@
-const access_key = localStorage.getItem('access_key')
+const access_key = localStorage.getItem('access_key');
+
+const clientsArray = [];
 
 function refreshPage(data){
 	location.reload()
 }
 
-function loadClients(data){
-	console.log(data)
+function saveConnections(data){
+	data.forEach(connection =>{
+		clientsArray.forEach((client,i) =>{
+			if(connection.company===client._id){
+				clientsArray[i].destination = connection.destination
+			}
+		})
+	})
+	loadClients()
+}
+
+function getConnections(){
+   const payload = {
+		url:`http://localhost:8080/connect`,
+		headers:{
+			'Authorization':`Bearer ${access_key}`
+		},
+		error:function(error){
+			console.log('error ' + JSON.stringify(error));
+		},
+		success:saveConnections
+	}
+	$.get(payload)
+}
+
+function loadClients(){
 	let newRow = false;
 	let rowCount = 0;
-	for(i=0;i<data.length;i++){
+	for(i=0;i<clientsArray.length;i++){
 		if(!(newRow)){
-			let cardHtml = `<div class="col-4">
-			                    <div class="card text-white bg-primary mb-3" data-id="${data[i]._id}" style="max-width: 18rem;">
-			                        <div class="card-header">
-			                          <span class="comp-name">Name: ${data[i].company}</span><button type="button" class="btn btn-light right" data-toggle="modal" data-target="#editModal">Edit</button>
-			                          <div>
-			                              <span>ID: ${data[i]._id}</span>
-			                          </div>
-			                        </div>
-			                        <div class="card-body">
-			                          <h5 class="js-connection">Segment:<button type="button" data-id="${data[i]._id}" class="btn btn-outline-success add-connect">Add Connection</button></h5>
-			                          <h5 class="js-orders-today">Orders: 2</h5>
-			                          <h5 class="js-rev-today">Revenue: 499.98</h5>
-			                          <div class="button-wrapper">
-			                              <button type="button" class="btn btn-light trash right" data-toggle="modal" data-target="#trashModal">
-			                                  <i class="fas fa-trash-alt"></i>
-			                              </button>
-			                          </div>
-			                        </div>
-			                    </div>
-			                </div>`
-			$(`.row[data-index="${rowCount}"]`).append(cardHtml)
+			if(!(clientsArray[i].destination)){
+				let cardHtml = `<div class="col-4">
+				                    <div class="card text-white bg-primary mb-3" data-id="${clientsArray[i]._id}" style="max-width: 18rem;">
+				                        <div class="card-header">
+				                          <span class="comp-name">Name: ${clientsArray[i].company}</span><button type="button" class="btn btn-light right" data-toggle="modal" data-target="#editModal">Edit</button>
+				                          <div>
+				                              <span>ID: ${clientsArray[i]._id}</span>
+				                          </div>
+				                        </div>
+				                        <div class="card-body">
+				                          <h5 class="js-connection">Connection:<button type="button" data-id="${clientsArray[i]._id}" class="btn btn-outline-success add-connect">Add Connection</button></h5>
+				                          <h5 class="js-orders-today">Orders: 2</h5>
+				                          <h5 class="js-rev-today">Revenue: 499.98</h5>
+				                          <div class="button-wrapper">
+				                              <button type="button" class="btn btn-light trash right" data-toggle="modal" data-target="#trashModal">
+				                                  <i class="fas fa-trash-alt"></i>
+				                              </button>
+				                          </div>
+				                        </div>
+				                    </div>
+				                </div>`
+				$(`.row[data-index="${rowCount}"]`).append(cardHtml)
+			} else {
+				let cardHtml = `<div class="col-4">
+				                    <div class="card text-white bg-primary mb-3" data-id="${clientsArray[i]._id}" style="max-width: 18rem;">
+				                        <div class="card-header">
+				                          <span class="comp-name">Name: ${clientsArray[i].company}</span><button type="button" class="btn btn-light right" data-toggle="modal" data-target="#editModal">Edit</button>
+				                          <div>
+				                              <span>ID: ${clientsArray[i]._id}</span>
+				                          </div>
+				                        </div>
+				                        <div class="card-body">
+				                          <h5 class="js-connection">Connection:<button type="button" data-id="${clientsArray[i]._id}" class="btn btn-outline-success add-connect">${clientsArray[i].destination}</button></h5>
+				                          <h5 class="js-orders-today">Orders: 2</h5>
+				                          <h5 class="js-rev-today">Revenue: 499.98</h5>
+				                          <div class="button-wrapper">
+				                              <button type="button" class="btn btn-light trash right" data-toggle="modal" data-target="#trashModal">
+				                                  <i class="fas fa-trash-alt"></i>
+				                              </button>
+				                          </div>
+				                        </div>
+				                    </div>
+				                </div>`
+				$(`.row[data-index="${rowCount}"]`).append(cardHtml)
+			}
 			if((i+1)%3===0){
 				newRow = true
 				rowCount++;
@@ -38,30 +88,61 @@ function loadClients(data){
 		} else {
 			let rowHtml = `<div data-index="${rowCount}" class="row"></div>`
 			$('.container').append(rowHtml)
-			let cardHtml = `<div class="col-4">
-			                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-			                        <div class="card-header">
-			                          <span class="comp-name">Name: ${data[i].company}</span><button type="button" class="btn btn-light right" data-toggle="modal" data-target="#editModal">Edit</button>
-				                      <div>
-			                              <span>Client ID: ${data[i]._id}</span>
-			                          </div>
-			                        </div>
-			                        <div class="card-body">
-			                          <h5 class="js-connection">Segment:<button type="button" data-id="${data[i]._id}" class="btn btn-outline-success add-connect">Add Connection</button></h5>
-			                          <h5 class="js-orders-today">Orders: 2</h5>
-			                          <h5 class="js-rev-today">Revenue: 499.98</h5>
-			                          <div class="button-wrapper">
-			                              <button type="button" class="btn btn-light trash right" data-toggle="modal" data-target="#trashModal">
-			                                 <i class="fas fa-trash-alt"></i>
-			                              </button>
-			                          </div>
-			                        </div>
-			                    </div>
-			                </div>`
-			$(`.row[data-index="${rowCount}"]`).append(cardHtml)
+			if(!(clientsArray[i].destination)){
+				let cardHtml = `<div class="col-4">
+				                    <div class="card text-white bg-primary mb-3" data-id="${data[i]._id}" style="max-width: 18rem;">
+				                        <div class="card-header">
+				                          <span class="comp-name">Name: ${data[i].company}</span><button type="button" class="btn btn-light right" data-toggle="modal" data-target="#editModal">Edit</button>
+				                          <div>
+				                              <span>ID: ${data[i]._id}</span>
+				                          </div>
+				                        </div>
+				                        <div class="card-body">
+				                          <h5 class="js-connection">Connection:<button type="button" data-id="${data[i]._id}" class="btn btn-outline-success add-connect">Add Connection</button></h5>
+				                          <h5 class="js-orders-today">Orders: 2</h5>
+				                          <h5 class="js-rev-today">Revenue: 499.98</h5>
+				                          <div class="button-wrapper">
+				                              <button type="button" class="btn btn-light trash right" data-toggle="modal" data-target="#trashModal">
+				                                  <i class="fas fa-trash-alt"></i>
+				                              </button>
+				                          </div>
+				                        </div>
+				                    </div>
+				                </div>`
+				$(`.row[data-index="${rowCount}"]`).append(cardHtml)
+			} else {
+				let cardHtml = `<div class="col-4">
+				                    <div class="card text-white bg-primary mb-3" data-id="${data[i]._id}" style="max-width: 18rem;">
+				                        <div class="card-header">
+				                          <span class="comp-name">Name: ${data[i].company}</span><button type="button" class="btn btn-light right" data-toggle="modal" data-target="#editModal">Edit</button>
+				                          <div>
+				                              <span>ID: ${data[i]._id}</span>
+				                          </div>
+				                        </div>
+				                        <div class="card-body">
+				                          <h5 class="js-connection">Connection:<button type="button" data-id="${data[i]._id}" class="btn btn-outline-success add-connect">${clientsArray[i].destination}</button></h5>
+				                          <h5 class="js-orders-today">Orders: 2</h5>
+				                          <h5 class="js-rev-today">Revenue: 499.98</h5>
+				                          <div class="button-wrapper">
+				                              <button type="button" class="btn btn-light trash right" data-toggle="modal" data-target="#trashModal">
+				                                  <i class="fas fa-trash-alt"></i>
+				                              </button>
+				                          </div>
+				                        </div>
+				                    </div>
+				                </div>`
+				$(`.row[data-index="${rowCount}"]`).append(cardHtml)
+			}
 			newRow = false;
 		}
 	}
+}
+
+function saveClients(data){
+   data.forEach(clientObj=>{
+   	clientsArray.push(clientObj)
+   })
+   getConnections()
 }
 
 if((access_key)){
@@ -73,7 +154,7 @@ if((access_key)){
 		error:function(error){
 			console.log('error ' + JSON.stringify(error));
 		},
-		success:loadClients
+		success:saveClients
 	}
 	$.get(payload)
 }
