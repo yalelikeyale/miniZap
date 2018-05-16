@@ -14,6 +14,7 @@ connectionsRouter.use(jsonParser);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 connectionsRouter.post('/woocom', [jwtAuth, checkClients, checkConnectionRequest], (req,res)=>{
+	console.log('made it inside woocomm connection creator function')
 	const source = 'woocomm'
     const {company} = req.body
 	Destinations.find({company, source})

@@ -22,7 +22,7 @@ $('#seg-form').on('submit', function(e){
 	const payload = {
 		url:'https://dry-chamber-24837.herokuapp.com/connect/woocom',
 		dataType:'json',
-		data:JSON.stringify(data),
+		data:data,
 		headers:{
 			'content-type':'application/json',
 			'Authorization':`Bearer ${user}`
@@ -30,5 +30,6 @@ $('#seg-form').on('submit', function(e){
 		error:function(err){console.log(err)},
 		success:function(resp){console.log(resp)}
 	}
+	console.log(payload.data)
 	$.post(payload)
 })
