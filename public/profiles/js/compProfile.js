@@ -13,6 +13,7 @@ $('#aws-form').on('submit', function(){
 })
 
 $('#seg-form').on('submit', function(e){
+	console.log('made it into create segment connection')
 	e.preventDefault()
 	const segment_write = $(this).find('#segment_write').val()
 	const data = {
