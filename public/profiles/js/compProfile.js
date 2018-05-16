@@ -5,14 +5,14 @@ if(!(client_id)){
 	window.location = '../index.html'
 } 
 
-$('#aws-form').on('submit', function(){
+$('.aws-form').on('submit', function(){
 	const access_key = $(this).find('#access_key').val()
 	const secret_key = $(this).find('#secret_key').val()
 	const region = $(this).find('#region').val()
 	const endpoint = $(this).find('#endpoint').val()
 })
 
-$('#seg-form').on('submit', function(e){
+$('.seg-form').on('submit', function(e){
 	console.log('made it into create segment connection')
 	e.preventDefault()
 	const segment_write = $(this).find('#segment_write').val()
