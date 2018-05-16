@@ -64,6 +64,7 @@ woocomRouter.post('/:company/identify', jsonParser,(req,res)=>{
 });
 
 woocomRouter.post('/:company/order-completed', [jsonParser, checkWooConnection], (req,res)=>{
+	console.log('inside order created request')
 	const destination = req.destination
 	const company = req.company
 	const order = req.body;

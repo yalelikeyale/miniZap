@@ -1,6 +1,7 @@
 const {Destinations, Clients} = require('../models')
 
 function checkWooConnection (req, res, next) {
+	console.log('inside check woo connection')
     const company = req.params.company
     const source = 'woocomm'
 	Destinations.findOne({company, source})

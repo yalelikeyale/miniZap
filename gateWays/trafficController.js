@@ -30,6 +30,7 @@ const trafficControl = {
 	},
 	segment:{
 		create:(query, order) => {
+			console.log('inside traffic control create function')
 			const company = query
 			Segment.findOne({company})
 				.then(destination => {

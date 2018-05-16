@@ -8,9 +8,7 @@ const segmentFactory = () => ({
 	},
 	sendIt(order){
 		console.log('sending order...')
-		console.log()
 		const analytics = new Analytics(this.segment_write);
-		console.log(analytics)
 		analytics.track(order, function(err,batch){
 			if(err){
 				console.log(err)
