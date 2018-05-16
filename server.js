@@ -1,3 +1,4 @@
+require('newrelic');
 const config = require('dotenv').config()
 const PORT = process.env.PORT || 8080;
 const MLAB_URI = process.env.MLAB_URI;
