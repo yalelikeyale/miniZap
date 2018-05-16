@@ -14,6 +14,7 @@ clientRouter.use(jsonParser);
 
 // Post to register a new company
 clientRouter.post('/', jwtAuth, (req, res) => {
+  console.log('made it inside of create new client router')
   const requiredFields = ['company'];
   const missingField = requiredFields.find(field => !(field in req.body));
 

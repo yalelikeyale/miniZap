@@ -166,10 +166,8 @@ $('.container').on('click','.add-connect', function(e){
 })
 
 $('.add-client').on('submit',function(e){
-	console.log('in add new client event listener function')
 	e.preventDefault()
 	const company = $(this).find('#new-company').val()
-	console.log(company)
     const payload = {
 		url:'https://dry-chamber-24837.herokuapp.com/clients',
 		headers:{
