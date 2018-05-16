@@ -19,7 +19,7 @@ function saveConnections(data){
 
 function getConnections(){
    const payload = {
-		url:`http://localhost:8080/connect`,
+		url:`https://dry-chamber-24837.herokuapp.com/connect`,
 		headers:{
 			'Authorization':`Bearer ${access_key}`
 		},
@@ -147,7 +147,7 @@ function saveClients(data){
 
 if((access_key)){
    const payload = {
-		url:'http://localhost:8080/clients',
+		url:'https://dry-chamber-24837.herokuapp.com/clients',
 		headers:{
 			'Authorization':`Bearer ${access_key}`
 		},
@@ -171,7 +171,7 @@ $('.add-client').on('submit',function(e){
 	const company = $(this).find('#new-company').val()
 	console.log(company)
     const payload = {
-		url:'http://localhost:8080/clients',
+		url:'https://dry-chamber-24837.herokuapp.com/clients',
 		headers:{
 			'Authorization':`Bearer ${access_key}`
 		},
@@ -191,7 +191,7 @@ $('.btn.delete').click(function(e){
 	console.log(_id)
 	if(_id){
 	    const payload = {
-			url:`http://localhost:8080/clients/${_id}`,
+			url:`https://dry-chamber-24837.herokuapp.com/clients/${_id}`,
 			method:'DELETE',
 			headers:{
 				'Authorization':`Bearer ${access_key}`
@@ -212,7 +212,7 @@ $('.btn.edit').click(function(e){
 	console.log(_id, company)
 	if(_id && company){
 	    const payload = {
-			url:`http://localhost:8080/clients/${_id}`,
+			url:`https://dry-chamber-24837.herokuapp.com/clients/${_id}`,
 			method:'PUT',
 			headers:{
 				'Authorization':`Bearer ${access_key}`

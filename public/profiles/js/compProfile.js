@@ -20,7 +20,7 @@ $('#seg-form').on('submit', function(e){
 		segment:{segment_write}
 	}
 	const payload = {
-		url:'http://localhost:8080/connect/woocom',
+		url:'https://dry-chamber-24837.herokuapp.com/connect/woocom',
 		dataType:'json',
 		data:JSON.stringify(data),
 		headers:{
