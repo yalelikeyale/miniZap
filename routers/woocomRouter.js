@@ -6,7 +6,7 @@ const {checkWooConnection} = require('../middleware')
 const {trafficControl} = require('../gateWays')
 
 
-const genOrderObject = (order)=>{
+const genOrderObject = (order, status)=>{
 	const productsList = [];
 	if(('coupon_lines' in order)&&(order.coupon_lines.length>0)){
 		if('coupon_code' in order.coupon_lines[0]){
@@ -29,7 +29,7 @@ const genOrderObject = (order)=>{
 			productsList.push(lineItem);
 		}
 		orderPayload = {
-			event:'Order Completed - WC',
+			event:`Order ${status} - WC`,
 			userId:order.customer_id,
 			properties:{
 				order_id: order.id,
@@ -68,16 +68,16 @@ woocomRouter.post('/:company/order-completed', [jsonParser, checkWooConnection],
 	const destination = req.destination
 	const company = req.company
 	const order = req.body;
-	const orderPayload = genOrderObject(order)
+	const orderPayload = genOrderObject(order, 'Completed')
 	trafficControl[destination].create(company, orderPayload)
 	res.status(201).end()
 });
 
-woocomRouter.post('/:company/order-updated', jsonParser, (req,res)=>{
+woocomRouter.post('/:company/order-updated', [jsonParser, checkWooConnection], (req,res)=>{
 	const destination = req.destination
 	const company = req.company
 	const order = req.body;
-	const orderPayload = genOrderObject(order)
+	const orderPayload = genOrderObject(order, 'Updated')
 	trafficControl[destination].update(company, orderPayload)
 	res.status(201).end()
 })
