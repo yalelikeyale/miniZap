@@ -78,7 +78,7 @@ woocomRouter.post('/:company/order-updated', [jsonParser, checkWooConnection], (
 	const company = req.company
 	const order = req.body;
 	const orderPayload = genOrderObject(order, 'Updated')
-	trafficControl[destination].update(company, orderPayload)
+	trafficControl[destination].create(company, orderPayload)
 	res.status(201).end()
 })
 
